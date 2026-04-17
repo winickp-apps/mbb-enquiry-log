@@ -15,6 +15,7 @@
   --red:#CF222E; --red-bg:rgba(207,34,46,0.08); --red-bdr:rgba(207,34,46,0.25);
   --grey-bg:rgba(140,149,159,0.10); --grey-bdr:rgba(140,149,159,0.28);
   --blue:#0969DA; --blue-bg:rgba(9,105,218,0.08); --blue-bdr:rgba(9,105,218,0.25);
+  --purple:#8250DF; --purple-bg:rgba(130,80,223,0.08); --purple-bdr:rgba(130,80,223,0.25);
   --header:#1C2128; --r:6px; --rl:10px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -50,7 +51,7 @@ html,body{min-height:100%;background:var(--bg);color:var(--txt);font-family:'IBM
 .body-wrap{padding:24px 32px;max-width:1600px;margin:0 auto}
 
 /* KPIs */
-.kpi-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-bottom:20px}
+.kpi-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin-bottom:20px}
 .kpi{background:var(--bg);border:1px solid var(--bdr);border-radius:var(--rl);padding:14px 16px;cursor:pointer;transition:border-color .15s,background .15s,box-shadow .15s}
 .kpi:hover{border-color:var(--bdr2);box-shadow:0 1px 4px rgba(0,0,0,.06)}
 .kpi.active{border-color:var(--amber-bdr);background:var(--amber-bg)}
@@ -58,6 +59,7 @@ html,body{min-height:100%;background:var(--bg);color:var(--txt);font-family:'IBM
 .kpi.active.lost{border-color:var(--red-bdr);background:var(--red-bg)}
 .kpi.active.cancelled{border-color:var(--grey-bdr);background:var(--grey-bg)}
 .kpi.active.process{border-color:var(--blue-bdr);background:var(--blue-bg)}
+.kpi.active.closed{border-color:var(--purple-bdr);background:var(--purple-bg)}
 .kpi-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.9px;color:var(--txt3);margin-bottom:6px;font-family:'IBM Plex Mono',monospace}
 .kpi-val{font-size:28px;font-weight:300;letter-spacing:-1px;color:var(--txt);line-height:1}
 .kpi.active .kpi-val{color:var(--amber)}
@@ -65,6 +67,7 @@ html,body{min-height:100%;background:var(--bg);color:var(--txt);font-family:'IBM
 .kpi.active.lost .kpi-val{color:var(--red)}
 .kpi.active.cancelled .kpi-val{color:var(--txt2)}
 .kpi.active.process .kpi-val{color:var(--blue)}
+.kpi.active.closed .kpi-val{color:var(--purple)}
 
 /* Filters */
 .filter-bar{display:flex;gap:10px;margin-bottom:12px;align-items:center;flex-wrap:wrap}
@@ -101,11 +104,12 @@ td{padding:8px 11px;vertical-align:middle;overflow:hidden;text-overflow:ellipsis
 .b-lost{background:var(--red-bg);color:var(--red);border:1px solid var(--red-bdr)}
 .b-cancelled{background:var(--grey-bg);color:var(--txt2);border:1px solid var(--grey-bdr)}
 .b-process{background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-bdr)}
+.b-closed{background:var(--purple-bg);color:var(--purple);border:1px solid var(--purple-bdr)}
 
 /* Tick buttons */
 .tick{background:none;border:none;cursor:pointer;padding:3px;border-radius:4px;font-size:14px;line-height:1;transition:background .1s,transform .12s;display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px}
 .tick:hover{background:var(--bg3);transform:scale(1.15)}
-.tick.on{color:var(--green)}.tick.off{color:#D0D7DE}.tick.na{color:var(--txt3);font-size:10px;font-family:'IBM Plex Mono',monospace}
+.tick.on{color:var(--green)}.tick.off{color:var(--red)}.tick.na{color:var(--txt3);font-size:10px;font-family:'IBM Plex Mono',monospace}
 
 /* Row action buttons (edit, delete, save, cancel) */
 .row-actions{display:flex;gap:3px;justify-content:flex-end;align-items:center}
@@ -134,6 +138,13 @@ tr.editing .icon-btn{opacity:1}
 .pag-btn:disabled{opacity:.35;cursor:default}
 .pag-btn.active{background:var(--amber);border-color:var(--amber);color:#FFF;font-weight:500}
 .pag-ellipsis{padding:0 4px;font-size:12px;color:var(--txt3)}
+
+/* Show toggles */
+.show-toggles{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.toggle-lbl{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--txt2);cursor:pointer;user-select:none;white-space:nowrap}
+.toggle-lbl input[type=checkbox]{width:14px;height:14px;accent-color:var(--amber);cursor:pointer}
+.toggle-lbl.lost-lbl{color:var(--red)}
+.toggle-lbl.cancelled-lbl{color:var(--txt2)}
 
 /* Error banner */
 .err-banner{background:var(--red-bg);border:1px solid var(--red-bdr);border-radius:var(--r);padding:12px 16px;font-size:13px;color:var(--red);margin-bottom:20px;display:none;line-height:1.6}
@@ -207,6 +218,14 @@ tr.editing .icon-btn{opacity:1}
         <input class="search" id="search" type="text" placeholder="Search project, client, contractor, SR number…">
       </div>
       <div class="result-meta" id="meta"></div>
+      <div class="show-toggles">
+        <label class="toggle-lbl lost-lbl">
+          <input type="checkbox" id="show-lost"> Show Lost
+        </label>
+        <label class="toggle-lbl cancelled-lbl">
+          <input type="checkbox" id="show-cancelled"> Show Cancelled
+        </label>
+      </div>
     </div>
 
     <div class="tbl-wrap">
@@ -256,6 +275,7 @@ tr.editing .icon-btn{opacity:1}
           <option value="WON">WON</option>
           <option value="LOST">LOST</option>
           <option value="CANCELLED">CANCELLED</option>
+          <option value="CLOSED">CLOSED</option>
         </select>
       </div>
       <div class="field"><label>Proposal Submitted On</label><input id="f-prop" placeholder="DD.MM.YYYY"></div>
@@ -314,8 +334,10 @@ let filtered      = [];
 let currentStatus = 'ALL';
 let currentPage   = 1;
 const PER_PAGE    = 15;
-let editingId     = null;   // Airtable record ID currently in edit mode
+let editingId     = null;
 let pendingDelete = null;
+let showLost      = false;
+let showCancelled = false;
 
 // SVG icons
 const ICON_PENCIL = `<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M11.013 1.427a1.75 1.75 0 012.474 2.474L4.92 12.47l-3.795.505.505-3.794 8.383-8.754zM13 3.5L12 2.5 3 11.5l-.25 1.75 1.75-.25L13 3.5z" fill="currentColor"/></svg>`;
@@ -332,6 +354,12 @@ document.getElementById('modal').addEventListener('click', e => { if (e.target =
 document.getElementById('confirm-cancel').addEventListener('click', closeConfirm);
 document.getElementById('confirm-delete').addEventListener('click', confirmDelete);
 document.getElementById('confirm-modal').addEventListener('click', e => { if (e.target === document.getElementById('confirm-modal')) closeConfirm(); });
+document.getElementById('show-lost').addEventListener('change', e => {
+  showLost = e.target.checked; currentPage = 1; applyFilters();
+});
+document.getElementById('show-cancelled').addEventListener('change', e => {
+  showCancelled = e.target.checked; currentPage = 1; applyFilters();
+});
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') { closeModal(); closeConfirm(); cancelEdit(); }
   if (e.key === 'Enter' && editingId) saveEditRow();
@@ -392,7 +420,7 @@ function parseItems() {
 }
 
 function s(v) { return (v === null || v === undefined) ? '' : String(v).trim(); }
-function normStatus(v) { return v && v.includes('Under Process') ? 'Under Process' : (v || ''); }
+function normStatus(v) { if (!v) return ''; if (v.includes('Under Process')) return 'Under Process'; return v; }
 
 // ── API calls ─────────────────────────────────────────────────────────
 async function patchRecord(id, fields) {
@@ -515,7 +543,7 @@ function confirmDelete() { if (!pendingDelete) return; const id = pendingDelete.
 
 // ── KPIs ──────────────────────────────────────────────────────────────
 function renderKPIs() {
-  const c = { ALL:items.length, WON:0, LOST:0, CANCELLED:0, 'Under Process':0 };
+  const c = { ALL:items.length, WON:0, LOST:0, CANCELLED:0, 'Under Process':0, CLOSED:0 };
   items.forEach(r => { if (c[r.status] !== undefined) c[r.status]++; });
   const cards = [
     {k:'ALL',label:'Total',cls:''},
@@ -523,6 +551,7 @@ function renderKPIs() {
     {k:'Under Process',label:'In Progress',cls:'process'},
     {k:'LOST',label:'Lost',cls:'lost'},
     {k:'CANCELLED',label:'Cancelled',cls:'cancelled'},
+    {k:'CLOSED',label:'Closed',cls:'closed'},
   ];
   const el = document.getElementById('kpis');
   el.innerHTML = cards.map(x => `
@@ -541,12 +570,15 @@ function applyFilters() {
   filtered = items.filter(r => {
     const ms = currentStatus === 'ALL' || r.status === currentStatus;
     const mq = !q || [r.project, r.client, r.main_cont, r.sr_no].some(f => f.toLowerCase().includes(q));
-    return ms && mq;
+    // When viewing ALL, hide LOST/CANCELLED unless toggled on
+    const hideLost      = currentStatus === 'ALL' && r.status === 'LOST'      && !showLost;
+    const hideCancelled = currentStatus === 'ALL' && r.status === 'CANCELLED' && !showCancelled;
+    return ms && mq && !hideLost && !hideCancelled;
   });
   renderTable(); renderPagination();
 }
 
-function badgeCls(s) { return s==='WON'?'b-won':s==='LOST'?'b-lost':s==='CANCELLED'?'b-cancelled':'b-process'; }
+function badgeCls(s) { return s==='WON'?'b-won':s==='LOST'?'b-lost':s==='CANCELLED'?'b-cancelled':s==='CLOSED'?'b-closed':'b-process'; }
 function badgeLbl(s) { return s==='Under Process'?'In Progress':(s||'—'); }
 
 function mkTick(id, itemField, af, val) {
@@ -577,7 +609,7 @@ function mkDisplayRow(r) {
 }
 
 function mkEditRow(r) {
-  const statusOpts = ['Under Process','WON','LOST','CANCELLED']
+  const statusOpts = ['Under Process','WON','LOST','CANCELLED','CLOSED']
     .map(s => `<option value="${s}" ${r.status===s||( s==='Under Process'&&r.status==='Under Process')?'selected':''}>${s==='Under Process'?'In Progress':s}</option>`)
     .join('');
   return `<tr class="editing" data-id="${r._id}">
