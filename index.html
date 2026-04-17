@@ -24,6 +24,20 @@ html,body{min-height:100%;background:var(--bg);color:var(--txt);font-family:'IBM
 ::-webkit-scrollbar-track{background:var(--bg2)}
 ::-webkit-scrollbar-thumb{background:var(--bg3);border-radius:3px}
 
+/* Login screen */
+#login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px;background:var(--bg)}
+.login-card{background:var(--bg);border:1px solid var(--bdr2);border-radius:16px;padding:48px 52px;max-width:400px;width:100%;text-align:center;box-shadow:0 4px 24px rgba(0,0,0,.08)}
+.login-dot{width:10px;height:10px;border-radius:50%;background:var(--amber);margin:0 auto 20px;animation:pulse 2.4s ease-in-out infinite}
+.login-title{font-size:20px;font-weight:600;letter-spacing:-.3px;margin-bottom:4px}
+.login-sub{font-size:12px;color:var(--txt3);font-family:'IBM Plex Mono',monospace;margin-bottom:32px;letter-spacing:.4px}
+.login-field{display:flex;flex-direction:column;gap:6px;text-align:left;margin-bottom:16px}
+.login-field label{font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--txt3);font-family:'IBM Plex Mono',monospace}
+.login-input{background:var(--bg);border:1px solid var(--bdr2);border-radius:var(--r);padding:10px 12px;font-size:14px;color:var(--txt);font-family:'IBM Plex Sans',sans-serif;outline:none;transition:border-color .15s,box-shadow .15s;width:100%}
+.login-input:focus{border-color:var(--amber);box-shadow:0 0 0 3px var(--amber-bg)}
+.login-btn{width:100%;background:var(--amber);color:#FFF;border:none;border-radius:var(--r);padding:11px;font-size:14px;font-weight:600;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;transition:opacity .15s;margin-top:4px}
+.login-btn:hover{opacity:.88}
+.login-error{font-size:12px;color:var(--red);margin-top:10px;min-height:18px}
+
 /* Loading */
 #loading{display:flex;align-items:center;justify-content:center;min-height:100vh;flex-direction:column;gap:14px}
 .spin{width:28px;height:28px;border:2px solid var(--bg3);border-top-color:var(--amber);border-radius:50%;animation:spin .8s linear infinite}
@@ -184,6 +198,20 @@ tr.editing .icon-btn{opacity:1}
 </head>
 <body>
 
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-dot"></div>
+    <div class="login-title">mBELLAb Power Solutions</div>
+    <div class="login-sub">Customer Enquiry Log · mBb-FM-13</div>
+    <div class="login-field">
+      <label>Password</label>
+      <input class="login-input" id="login-pwd" type="password" placeholder="Enter password" autocomplete="current-password">
+    </div>
+    <button class="login-btn" id="login-btn">Sign in</button>
+    <div class="login-error" id="login-error"></div>
+  </div>
+</div>
+
 <div id="loading">
   <div class="spin"></div>
   <div class="load-txt">Loading enquiries…</div>
@@ -303,11 +331,9 @@ tr.editing .icon-btn{opacity:1}
 
 <script>
 // ═══════════════════════════════════════════════════════════════════════
-// CONFIG
+// CONFIG — no token here, it lives securely in the Cloudflare Worker
 // ═══════════════════════════════════════════════════════════════════════
-const TOKEN    = 'patkDsoz9d0EYto2W.21ba19c04106d4c94c36e8ae4096d57363260e14b4ba48541425c3976c6a142c';
-const BASE_ID  = 'appifpueonY375LGS';
-const TABLE_ID = 'tblFNKupSXYBOIZxB';
+const WORKER_URL = 'https://mbb-enquiry-proxy.paul-winick.workers.dev';
 const F = {
   SR_NO:        'SR. No.',
   DATE:         'Enquiry Date',
@@ -325,8 +351,9 @@ const F = {
 };
 // ═══════════════════════════════════════════════════════════════════════
 
-const API     = `https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}`;
-const HEADERS = { 'Authorization': `Bearer ${TOKEN}`, 'Content-Type': 'application/json' };
+// API and HEADERS are set after login — see initApp()
+let API     = WORKER_URL;
+let HEADERS = { 'Content-Type': 'application/json' };  // X-App-Password added after login
 
 let allRecords    = [];
 let items         = [];
@@ -344,6 +371,53 @@ const ICON_PENCIL = `<svg width="13" height="13" viewBox="0 0 16 16" fill="none"
 const ICON_SAVE   = `<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z" fill="currentColor"/></svg>`;
 const ICON_CANCEL = `<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M3.72 3.72a.75.75 0 011.06 0L8 6.94l3.22-3.22a.75.75 0 111.06 1.06L9.06 8l3.22 3.22a.75.75 0 11-1.06 1.06L8 9.06l-3.22 3.22a.75.75 0 01-1.06-1.06L6.94 8 3.72 4.78a.75.75 0 010-1.06z" fill="currentColor"/></svg>`;
 const ICON_TRASH  = `<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M6.5 1h3a.5.5 0 010 1h-3a.5.5 0 010-1zM2 4.5A.5.5 0 012.5 4h11a.5.5 0 010 1H13l-.8 8.02A2 2 0 0110.21 15H5.79a2 2 0 01-1.99-1.98L3 5H2.5A.5.5 0 012 4.5z" fill="currentColor"/></svg>`;
+
+// ── Login ────────────────────────────────────────────────────────────
+let appPassword = sessionStorage.getItem('mbb_pwd') || '';
+
+function initApp() {
+  HEADERS['X-App-Password'] = appPassword;
+  document.getElementById('login-screen').style.display = 'none';
+  loadAll();
+}
+
+async function attemptLogin() {
+  const pwd    = document.getElementById('login-pwd').value.trim();
+  const errEl  = document.getElementById('login-error');
+  const btn    = document.getElementById('login-btn');
+  if (!pwd) { errEl.textContent = 'Please enter the password.'; return; }
+  btn.textContent = 'Checking…'; btn.disabled = true; errEl.textContent = '';
+  // Test the password by making a minimal request to the worker
+  try {
+    const res = await fetch(WORKER_URL + '?maxRecords=1', {
+      headers: { 'X-App-Password': pwd }
+    });
+    if (res.status === 401) {
+      errEl.textContent = 'Incorrect password. Please try again.';
+      btn.textContent = 'Sign in'; btn.disabled = false;
+      return;
+    }
+    // Password correct — store for session and start app
+    appPassword = pwd;
+    sessionStorage.setItem('mbb_pwd', pwd);
+    initApp();
+  } catch(e) {
+    errEl.textContent = 'Could not connect. Check your internet connection.';
+    btn.textContent = 'Sign in'; btn.disabled = false;
+  }
+}
+
+document.getElementById('login-btn').addEventListener('click', attemptLogin);
+document.getElementById('login-pwd').addEventListener('keydown', e => {
+  if (e.key === 'Enter') attemptLogin();
+});
+
+// Auto-login if password already in session
+if (appPassword) {
+  initApp();
+} else {
+  document.getElementById('login-screen').style.display = 'flex';
+}
 
 // ── Boot ──────────────────────────────────────────────────────────────
 document.getElementById('add-btn').addEventListener('click', showModal);
@@ -726,7 +800,7 @@ function saveEntry() {
 // ── Debug ─────────────────────────────────────────────────────────────
 async function showFieldNames() {
   try {
-    const res  = await fetch(API + '?maxRecords=1', { headers: HEADERS });
+    const res  = await fetch(WORKER_URL + '?maxRecords=1', { headers: HEADERS });
     const data = await res.json();
     const fields = Object.keys(data.records?.[0]?.fields || {});
     showError('<b>Your actual Airtable column names:</b><br><br>' +
