@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>mBELLAb Power Solutions — Customer Enquiry Log</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#FFFFFF; --bg2:#F6F8FA; --bg3:#EAEEF2;
+  --bdr:rgba(0,0,0,0.08); --bdr2:rgba(0,0,0,0.16);
+  --txt:#1C2128; --txt2:#57606A; --txt3:#8C959F;
+  --amber:#E36209; --amber-bg:rgba(227,98,9,0.07); --amber-bdr:rgba(227,98,9,0.25);
+  --green:#1A7F37; --green-bg:rgba(26,127,55,0.08); --green-bdr:rgba(26,127,55,0.25);
+  --red:#CF222E; --red-bg:rgba(207,34,46,0.08); --red-bdr:rgba(207,34,46,0.25);
+  --grey-bg:rgba(140,149,159,0.10); --grey-bdr:rgba(140,149,159,0.28);
+  --blue:#0969DA; --blue-bg:rgba(9,105,218,0.08); --blue-bdr:rgba(9,105,218,0.25);
+  --header:#1C2128; --r:6px; --rl:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;background:var(--bg);color:var(--txt);font-family:'IBM Plex Sans',sans-serif}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:var(--bg2)}
+::-webkit-scrollbar-thumb{background:var(--bg3);border-radius:3px}
+
+/* Loading */
+#loading{display:flex;align-items:center;justify-content:center;min-height:100vh;flex-direction:column;gap:14px}
+.spin{width:28px;height:28px;border:2px solid var(--bg3);border-top-color:var(--amber);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.load-txt{font-size:12px;color:var(--txt3);font-family:'IBM Plex Mono',monospace}
+
+/* Header */
+#app{display:none}
+.top-bar{background:var(--header);padding:0 32px;height:58px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;z-index:10}
+.brand-line{display:flex;align-items:center;gap:10px}
+.brand-dot{width:7px;height:7px;border-radius:50%;background:var(--amber);flex-shrink:0;animation:pulse 2.4s ease-in-out infinite}
+.brand-name{font-size:15px;font-weight:600;letter-spacing:-.3px;color:#E6EDF3}
+.brand-sub{font-size:11px;color:#484F58;font-family:'IBM Plex Mono',monospace;letter-spacing:.4px}
+.hdr-right{display:flex;align-items:center;gap:10px}
+.save-ind{display:flex;align-items:center;gap:5px;font-size:11px;color:#484F58;font-family:'IBM Plex Mono',monospace;white-space:nowrap;transition:color .25s}
+.save-dot{width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0}
+.save-ind.saved{color:#3FB950}.save-ind.saving{color:var(--amber)}.save-ind.err{color:#F85149}
+.btn-pri{background:var(--amber);color:#FFF;border:none;border-radius:var(--r);padding:7px 15px;font-size:13px;font-weight:600;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;transition:opacity .15s;white-space:nowrap}
+.btn-pri:hover{opacity:.88}
+.btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.15);color:#8B949E;border-radius:var(--r);padding:6px 12px;font-size:12px;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;transition:border-color .15s,color .15s}
+.btn-ghost:hover{border-color:rgba(255,255,255,0.3);color:#C9D1D9}
+
+/* Body */
+.body-wrap{padding:24px 32px;max-width:1600px;margin:0 auto}
+
+/* KPIs */
+.kpi-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-bottom:20px}
+.kpi{background:var(--bg);border:1px solid var(--bdr);border-radius:var(--rl);padding:14px 16px;cursor:pointer;transition:border-color .15s,background .15s,box-shadow .15s}
+.kpi:hover{border-color:var(--bdr2);box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.kpi.active{border-color:var(--amber-bdr);background:var(--amber-bg)}
+.kpi.active.won{border-color:var(--green-bdr);background:var(--green-bg)}
+.kpi.active.lost{border-color:var(--red-bdr);background:var(--red-bg)}
+.kpi.active.cancelled{border-color:var(--grey-bdr);background:var(--grey-bg)}
+.kpi.active.process{border-color:var(--blue-bdr);background:var(--blue-bg)}
+.kpi-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.9px;color:var(--txt3);margin-bottom:6px;font-family:'IBM Plex Mono',monospace}
+.kpi-val{font-size:28px;font-weight:300;letter-spacing:-1px;color:var(--txt);line-height:1}
+.kpi.active .kpi-val{color:var(--amber)}
+.kpi.active.won .kpi-val{color:var(--green)}
+.kpi.active.lost .kpi-val{color:var(--red)}
+.kpi.active.cancelled .kpi-val{color:var(--txt2)}
+.kpi.active.process .kpi-val{color:var(--blue)}
+
+/* Filters */
+.filter-bar{display:flex;gap:10px;margin-bottom:12px;align-items:center;flex-wrap:wrap}
+.search-wrap{position:relative;flex:1;min-width:200px}
+.search-wrap svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);pointer-events:none}
+.search{width:100%;background:var(--bg);border:1px solid var(--bdr2);border-radius:var(--r);padding:8px 12px 8px 32px;font-size:13px;color:var(--txt);font-family:'IBM Plex Sans',sans-serif;outline:none;transition:border-color .15s,box-shadow .15s}
+.search::placeholder{color:var(--txt3)}
+.search:focus{border-color:var(--amber);box-shadow:0 0 0 3px var(--amber-bg)}
+.result-meta{font-size:11px;color:var(--txt3);font-family:'IBM Plex Mono',monospace;white-space:nowrap}
+
+/* Table */
+.tbl-wrap{border:1px solid var(--bdr);border-radius:var(--rl);overflow:hidden;overflow-x:auto;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+table{width:100%;border-collapse:collapse;font-size:12.5px;min-width:980px}
+thead th{background:var(--bg2);color:var(--txt2);font-weight:600;font-size:11px;padding:10px 11px;text-align:left;border-bottom:1px solid var(--bdr);white-space:nowrap;letter-spacing:.2px}
+thead th.ctr{text-align:center}
+tbody tr{border-bottom:1px solid var(--bdr);transition:background .1s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:var(--bg2)}
+tbody tr.editing{background:#FFF8F3 !important;box-shadow:inset 3px 0 0 var(--amber)}
+td{padding:8px 11px;vertical-align:middle;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--txt)}
+.c-sr{width:68px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--txt3)!important}
+.c-date{width:94px}
+.c-proj{max-width:0}
+.c-mc{width:118px;font-size:11.5px;color:var(--txt2)!important}
+.c-client{width:88px;font-size:11.5px;color:var(--txt2)!important}
+.c-rtu{width:60px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--txt2)!important}
+.c-status{width:116px}
+.c-chk{width:44px;text-align:center}
+.c-actions{width:68px;text-align:right}
+
+/* Badges */
+.badge{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:500;padding:2px 8px;border-radius:20px;white-space:nowrap}
+.b-won{background:var(--green-bg);color:var(--green);border:1px solid var(--green-bdr)}
+.b-lost{background:var(--red-bg);color:var(--red);border:1px solid var(--red-bdr)}
+.b-cancelled{background:var(--grey-bg);color:var(--txt2);border:1px solid var(--grey-bdr)}
+.b-process{background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-bdr)}
+
+/* Tick buttons */
+.tick{background:none;border:none;cursor:pointer;padding:3px;border-radius:4px;font-size:14px;line-height:1;transition:background .1s,transform .12s;display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px}
+.tick:hover{background:var(--bg3);transform:scale(1.15)}
+.tick.on{color:var(--green)}.tick.off{color:#D0D7DE}.tick.na{color:var(--txt3);font-size:10px;font-family:'IBM Plex Mono',monospace}
+
+/* Row action buttons (edit, delete, save, cancel) */
+.row-actions{display:flex;gap:3px;justify-content:flex-end;align-items:center}
+.icon-btn{background:none;border:none;cursor:pointer;padding:4px;border-radius:4px;display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;transition:background .1s,color .1s;opacity:0;color:var(--txt3)}
+tr:hover .icon-btn{opacity:1}
+tr.editing .icon-btn{opacity:1}
+.icon-btn.edit:hover{background:var(--blue-bg);color:var(--blue)}
+.icon-btn.del:hover{background:var(--red-bg);color:var(--red)}
+.icon-btn.save{color:var(--green);opacity:1 !important}
+.icon-btn.save:hover{background:var(--green-bg)}
+.icon-btn.cancel-edit{color:var(--txt2);opacity:1 !important}
+.icon-btn.cancel-edit:hover{background:var(--bg3);color:var(--txt)}
+
+/* Inline edit inputs */
+.ei{width:100%;background:var(--bg);border:1px solid var(--amber);border-radius:4px;padding:3px 6px;font-size:12px;font-family:'IBM Plex Sans',sans-serif;color:var(--txt);outline:none;transition:box-shadow .15s}
+.ei:focus{box-shadow:0 0 0 2px var(--amber-bg)}
+.ei-select{width:100%;background:var(--bg);border:1px solid var(--amber);border-radius:4px;padding:3px 5px;font-size:12px;font-family:'IBM Plex Sans',sans-serif;color:var(--txt);outline:none;cursor:pointer}
+.c-date td, td.c-date{overflow:visible}
+
+/* Pagination */
+.pag{display:flex;align-items:center;justify-content:space-between;margin-top:14px;gap:12px;flex-wrap:wrap}
+.pag-info{font-size:11px;color:var(--txt3);font-family:'IBM Plex Mono',monospace}
+.pag-btns{display:flex;gap:4px;align-items:center}
+.pag-btn{background:var(--bg);border:1px solid var(--bdr2);color:var(--txt2);padding:5px 10px;border-radius:var(--r);font-size:12px;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:border-color .15s,background .15s}
+.pag-btn:hover:not(:disabled){border-color:var(--bdr2);background:var(--bg2)}
+.pag-btn:disabled{opacity:.35;cursor:default}
+.pag-btn.active{background:var(--amber);border-color:var(--amber);color:#FFF;font-weight:500}
+.pag-ellipsis{padding:0 4px;font-size:12px;color:var(--txt3)}
+
+/* Error banner */
+.err-banner{background:var(--red-bg);border:1px solid var(--red-bdr);border-radius:var(--r);padding:12px 16px;font-size:13px;color:var(--red);margin-bottom:20px;display:none;line-height:1.6}
+
+/* New Entry Modal */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;z-index:100;padding:20px}
+.modal{background:var(--bg);border:1px solid var(--bdr2);border-radius:var(--rl);padding:26px;width:100%;max-width:580px;max-height:90vh;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,.12)}
+.modal-title{font-size:15px;font-weight:600;margin-bottom:20px;display:flex;align-items:center;gap:8px}
+.modal-title span{font-size:11px;color:var(--txt3);font-weight:400;font-family:'IBM Plex Mono',monospace}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.field{display:flex;flex-direction:column;gap:5px}
+.field.full{grid-column:1/-1}
+.field label{font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--txt3);font-family:'IBM Plex Mono',monospace}
+.field input,.field select{background:var(--bg);border:1px solid var(--bdr2);border-radius:var(--r);padding:8px 10px;font-size:13px;color:var(--txt);font-family:'IBM Plex Sans',sans-serif;outline:none;transition:border-color .15s,box-shadow .15s}
+.field input:focus,.field select:focus{border-color:var(--amber);box-shadow:0 0 0 3px var(--amber-bg)}
+.field input::placeholder{color:var(--txt3)}
+.field input[readonly]{background:var(--bg2);color:var(--txt3);cursor:default}
+.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}
+.btn-cancel{background:transparent;border:1px solid var(--bdr2);color:var(--txt2);padding:8px 16px;border-radius:var(--r);font-size:13px;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;transition:border-color .15s}
+.btn-cancel:hover{background:var(--bg2)}
+
+/* Delete confirm */
+.confirm-modal{background:var(--bg);border:1px solid var(--bdr2);border-radius:var(--rl);padding:24px;width:100%;max-width:400px;box-shadow:0 8px 32px rgba(0,0,0,.12)}
+.confirm-title{font-size:15px;font-weight:600;margin-bottom:8px}
+.confirm-body{font-size:13px;color:var(--txt2);line-height:1.6;margin-bottom:20px}
+.confirm-body b{color:var(--txt);font-weight:500}
+.confirm-actions{display:flex;justify-content:flex-end;gap:8px}
+.btn-danger{background:var(--red);color:#FFF;border:none;border-radius:var(--r);padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;font-family:'IBM Plex Sans',sans-serif}
+.btn-danger:hover{opacity:.88}
+
+/* Toast */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--txt);color:var(--bg);padding:10px 16px;border-radius:var(--r);font-size:13px;z-index:200;opacity:0;transform:translateY(8px);transition:opacity .2s,transform .2s;pointer-events:none;max-width:340px;box-shadow:0 4px 12px rgba(0,0,0,.15)}
+.toast.show{opacity:1;transform:translateY(0)}
+.toast.ok{background:var(--green)}
+.toast.err{background:var(--red)}
+</style>
+</head>
+<body>
+
+<div id="loading">
+  <div class="spin"></div>
+  <div class="load-txt">Loading enquiries…</div>
+</div>
+
+<div id="app">
+  <div class="top-bar">
+    <div class="brand-line">
+      <div class="brand-dot"></div>
+      <div>
+        <div class="brand-name">mBELLAb Power Solutions</div>
+        <div class="brand-sub">Customer Enquiry Log &nbsp;·&nbsp; mBb-FM-13</div>
+      </div>
+    </div>
+    <div class="hdr-right">
+      <div class="save-ind" id="save-ind"><div class="save-dot"></div><span id="save-txt">connecting…</span></div>
+      <button class="btn-ghost" onclick="showFieldNames()">Debug fields</button>
+      <button class="btn-pri" id="add-btn">+ New Enquiry</button>
+    </div>
+  </div>
+
+  <div class="body-wrap">
+    <div class="err-banner" id="err-banner"></div>
+    <div class="kpi-grid" id="kpis"></div>
+
+    <div class="filter-bar">
+      <div class="search-wrap">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+          <circle cx="6.5" cy="6.5" r="5" stroke="#8C959F" stroke-width="1.5"/>
+          <path d="M10.5 10.5L14 14" stroke="#8C959F" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <input class="search" id="search" type="text" placeholder="Search project, client, contractor, SR number…">
+      </div>
+      <div class="result-meta" id="meta"></div>
+    </div>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th class="c-sr">SR No.</th>
+            <th class="c-date">Date</th>
+            <th class="c-proj">Project Name</th>
+            <th class="c-mc">Main Contractor</th>
+            <th class="c-client">Client</th>
+            <th class="c-rtu ctr" title="RTU / Substations">RTU</th>
+            <th class="c-status">Status</th>
+            <th class="c-chk ctr" title="Quotation">QTN</th>
+            <th class="c-chk ctr" title="Technical Proposal">TP</th>
+            <th class="c-chk ctr" title="LPO from Client">LPO-C</th>
+            <th class="c-chk ctr" title="LPO MBB to Supplier">LPO-S</th>
+            <th class="c-actions"></th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+
+    <div class="pag">
+      <div class="pag-info" id="pag-info"></div>
+      <div class="pag-btns" id="pag-btns"></div>
+    </div>
+  </div>
+</div>
+
+<!-- New Entry Modal -->
+<div class="modal-bg" id="modal" style="display:none">
+  <div class="modal">
+    <div class="modal-title">New Enquiry <span id="modal-sr-lbl"></span></div>
+    <div class="form-grid">
+      <div class="field"><label>SR Number</label><input id="f-sr" readonly></div>
+      <div class="field"><label>Enquiry Date</label><input id="f-date" placeholder="DD.MM.YYYY"></div>
+      <div class="field full"><label>Project Name *</label><input id="f-proj" placeholder="Full project name or tender reference"></div>
+      <div class="field"><label>Contractor</label><input id="f-cont"></div>
+      <div class="field"><label>Main Contractor</label><input id="f-mc" placeholder="e.g. NPC, IDS, Lucy"></div>
+      <div class="field"><label>Client</label><input id="f-client" placeholder="e.g. ADDC, TAQA, NEDC"></div>
+      <div class="field"><label>RTU / Substations</label><input id="f-rtu" placeholder="e.g. 5"></div>
+      <div class="field"><label>Status</label>
+        <select id="f-status">
+          <option value="Under Process">Under Process</option>
+          <option value="WON">WON</option>
+          <option value="LOST">LOST</option>
+          <option value="CANCELLED">CANCELLED</option>
+        </select>
+      </div>
+      <div class="field"><label>Proposal Submitted On</label><input id="f-prop" placeholder="DD.MM.YYYY"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" id="modal-cancel">Cancel</button>
+      <button class="btn-pri" id="modal-save">Add Enquiry</button>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Confirm -->
+<div class="modal-bg" id="confirm-modal" style="display:none">
+  <div class="confirm-modal">
+    <div class="confirm-title">Delete enquiry?</div>
+    <div class="confirm-body" id="confirm-body"></div>
+    <div class="confirm-actions">
+      <button class="btn-cancel" id="confirm-cancel">Cancel</button>
+      <button class="btn-danger" id="confirm-delete">Delete</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════════
+// CONFIG
+// ═══════════════════════════════════════════════════════════════════════
+const TOKEN    = 'patkDsoz9d0EYto2W.21ba19c04106d4c94c36e8ae4096d57363260e14b4ba48541425c3976c6a142c';
+const BASE_ID  = 'appifpueonY375LGS';
+const TABLE_ID = 'tblFNKupSXYBOIZxB';
+const F = {
+  SR_NO:        'SR. No.',
+  DATE:         'Enquiry Date',
+  PROJECT:      'Name of Project',
+  CONTRACTOR:   'Contractor',
+  MAIN_CONT:    'Main Contractor',
+  CLIENT:       'Client',
+  RTU:          'RTU Substations',
+  STATUS:       'Status',
+  PROPOSAL:     'Proposal Submitted On',
+  QUOTATION:    'Quotation',
+  TECH_PROP:    'Technical Proposal',
+  LPO_CLIENT:   'LPO (Client)',
+  LPO_SUPPLIER: 'LPO (MBB to Supplier)',
+};
+// ═══════════════════════════════════════════════════════════════════════
+
+const API     = `https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}`;
+const HEADERS = { 'Authorization': `Bearer ${TOKEN}`, 'Content-Type': 'application/json' };
+
+let allRecords    = [];
+let items         = [];
+let filtered      = [];
+let currentStatus = 'ALL';
+let currentPage   = 1;
+const PER_PAGE    = 15;
+let editingId     = null;   // Airtable record ID currently in edit mode
+let pendingDelete = null;
+
+// SVG icons
+const ICON_PENCIL = `<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M11.013 1.427a1.75 1.75 0 012.474 2.474L4.92 12.47l-3.795.505.505-3.794 8.383-8.754zM13 3.5L12 2.5 3 11.5l-.25 1.75 1.75-.25L13 3.5z" fill="currentColor"/></svg>`;
+const ICON_SAVE   = `<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z" fill="currentColor"/></svg>`;
+const ICON_CANCEL = `<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M3.72 3.72a.75.75 0 011.06 0L8 6.94l3.22-3.22a.75.75 0 111.06 1.06L9.06 8l3.22 3.22a.75.75 0 11-1.06 1.06L8 9.06l-3.22 3.22a.75.75 0 01-1.06-1.06L6.94 8 3.72 4.78a.75.75 0 010-1.06z" fill="currentColor"/></svg>`;
+const ICON_TRASH  = `<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M6.5 1h3a.5.5 0 010 1h-3a.5.5 0 010-1zM2 4.5A.5.5 0 012.5 4h11a.5.5 0 010 1H13l-.8 8.02A2 2 0 0110.21 15H5.79a2 2 0 01-1.99-1.98L3 5H2.5A.5.5 0 012 4.5z" fill="currentColor"/></svg>`;
+
+// ── Boot ──────────────────────────────────────────────────────────────
+document.getElementById('add-btn').addEventListener('click', showModal);
+document.getElementById('modal-cancel').addEventListener('click', closeModal);
+document.getElementById('modal-save').addEventListener('click', saveEntry);
+document.getElementById('search').addEventListener('input', () => { cancelEdit(); currentPage = 1; applyFilters(); });
+document.getElementById('modal').addEventListener('click', e => { if (e.target === document.getElementById('modal')) closeModal(); });
+document.getElementById('confirm-cancel').addEventListener('click', closeConfirm);
+document.getElementById('confirm-delete').addEventListener('click', confirmDelete);
+document.getElementById('confirm-modal').addEventListener('click', e => { if (e.target === document.getElementById('confirm-modal')) closeConfirm(); });
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closeModal(); closeConfirm(); cancelEdit(); }
+  if (e.key === 'Enter' && editingId) saveEditRow();
+});
+
+loadAll();
+
+// ── Load ──────────────────────────────────────────────────────────────
+async function loadAll() {
+  try {
+    let records = [], offset = null;
+    do {
+      const url = API + '?pageSize=100' + (offset ? '&offset=' + encodeURIComponent(offset) : '');
+      const res  = await fetch(url, { headers: HEADERS });
+      if (!res.ok) { const err = await res.json().catch(()=>({})); throw new Error(err.error?.message || `HTTP ${res.status}`); }
+      const data = await res.json();
+      records = records.concat(data.records || []);
+      offset  = data.offset || null;
+    } while (offset);
+    allRecords = records;
+    parseItems();
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('app').style.display     = 'block';
+    if (items.length > 0 && items.every(i => !i.project)) {
+      showError('Column names may not match. Click Debug fields to see your actual Airtable column names.');
+    }
+    renderKPIs(); applyFilters(); setSave('ready');
+    toast(`${items.length} enquiries loaded`, 'ok');
+  } catch(e) {
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('app').style.display     = 'block';
+    showError('<b>Failed to load:</b> ' + e.message);
+    setSave('err');
+  }
+}
+
+function parseItems() {
+  items = allRecords.map(rec => {
+    const f = rec.fields;
+    return {
+      _id:          rec.id,
+      sr_no:        s(f[F.SR_NO]),
+      date:         s(f[F.DATE]),
+      project:      s(f[F.PROJECT]),
+      contractor:   s(f[F.CONTRACTOR]),
+      main_cont:    s(f[F.MAIN_CONT]),
+      client:       s(f[F.CLIENT]),
+      rtu:          s(f[F.RTU]) || '--',
+      status:       normStatus(s(f[F.STATUS])),
+      proposal:     s(f[F.PROPOSAL]),
+      quotation:    s(f[F.QUOTATION]),
+      tech_prop:    s(f[F.TECH_PROP]),
+      lpo_client:   s(f[F.LPO_CLIENT]),
+      lpo_supplier: s(f[F.LPO_SUPPLIER]),
+    };
+  });
+  items.sort((a, b) => (parseInt(b.sr_no) || 0) - (parseInt(a.sr_no) || 0));
+}
+
+function s(v) { return (v === null || v === undefined) ? '' : String(v).trim(); }
+function normStatus(v) { return v && v.includes('Under Process') ? 'Under Process' : (v || ''); }
+
+// ── API calls ─────────────────────────────────────────────────────────
+async function patchRecord(id, fields) {
+  setSave('saving');
+  try {
+    const res = await fetch(`${API}/${id}`, { method:'PATCH', headers:HEADERS, body:JSON.stringify({fields}) });
+    if (!res.ok) { const d = await res.json().catch(()=>{}); throw new Error(d?.error?.message || `HTTP ${res.status}`); }
+    setSave('saved');
+  } catch(e) { setSave('err'); toast('Save failed: ' + e.message, 'err'); }
+}
+
+async function postRecord(fields) {
+  setSave('saving');
+  try {
+    const res  = await fetch(API, { method:'POST', headers:HEADERS, body:JSON.stringify({fields}) });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data?.error?.message || `HTTP ${res.status}`);
+    allRecords.push(data);
+    parseItems(); setSave('saved');
+    currentStatus = 'ALL'; currentPage = 1;
+    renderKPIs(); applyFilters();
+    toast(`SR-${fields[F.SR_NO]} added`, 'ok');
+  } catch(e) {
+    setSave('err');
+    showError('<b>Failed to add:</b> ' + e.message);
+    toast('Failed — see error above', 'err');
+  }
+}
+
+async function deleteRecord(id) {
+  setSave('saving');
+  try {
+    const res = await fetch(`${API}/${id}`, { method:'DELETE', headers:HEADERS });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    allRecords = allRecords.filter(r => r.id !== id);
+    parseItems(); setSave('saved');
+    const maxPage = Math.max(1, Math.ceil(filtered.length / PER_PAGE));
+    if (currentPage > maxPage) currentPage = maxPage;
+    renderKPIs(); applyFilters();
+    toast('Enquiry deleted', 'ok');
+  } catch(e) { setSave('err'); toast('Delete failed: ' + e.message, 'err'); }
+}
+
+// ── Inline edit ───────────────────────────────────────────────────────
+function startEdit(id) {
+  editingId = id;
+  renderTable();
+  // Focus project name input
+  setTimeout(() => {
+    const el = document.getElementById('ei-proj');
+    if (el) { el.focus(); el.select(); }
+  }, 50);
+}
+
+function cancelEdit() {
+  if (!editingId) return;
+  editingId = null;
+  renderTable();
+}
+
+async function saveEditRow() {
+  if (!editingId) return;
+  const gi = id => { const el = document.getElementById(id); return el ? el.value.trim() : ''; };
+  const fields = {
+    [F.DATE]:      gi('ei-date'),
+    [F.PROJECT]:   gi('ei-proj'),
+    [F.MAIN_CONT]: gi('ei-mc'),
+    [F.CLIENT]:    gi('ei-client'),
+    [F.RTU]:       gi('ei-rtu') || '--',
+    [F.STATUS]:    gi('ei-status'),
+    [F.PROPOSAL]:  gi('ei-prop'),
+  };
+  // Update local item immediately for snappy UI
+  const item = items.find(i => i._id === editingId);
+  if (item) {
+    item.date      = fields[F.DATE];
+    item.project   = fields[F.PROJECT];
+    item.main_cont = fields[F.MAIN_CONT];
+    item.client    = fields[F.CLIENT];
+    item.rtu       = fields[F.RTU];
+    item.status    = normStatus(fields[F.STATUS]);
+    item.proposal  = fields[F.PROPOSAL];
+    // Also update allRecords so re-parse stays consistent
+    const rec = allRecords.find(r => r.id === editingId);
+    if (rec) {
+      rec.fields[F.DATE]      = fields[F.DATE];
+      rec.fields[F.PROJECT]   = fields[F.PROJECT];
+      rec.fields[F.MAIN_CONT] = fields[F.MAIN_CONT];
+      rec.fields[F.CLIENT]    = fields[F.CLIENT];
+      rec.fields[F.RTU]       = fields[F.RTU];
+      rec.fields[F.STATUS]    = fields[F.STATUS];
+      rec.fields[F.PROPOSAL]  = fields[F.PROPOSAL];
+    }
+  }
+  const savedId = editingId;
+  editingId = null;
+  renderKPIs(); applyFilters();
+  await patchRecord(savedId, fields);
+  toast('Changes saved', 'ok');
+}
+
+// ── Tick toggle ───────────────────────────────────────────────────────
+function toggleTick(id, itemField, airtableField) {
+  const item = items.find(i => i._id === id);
+  if (!item) return;
+  item[itemField] = item[itemField] === '✔' ? '✖' : '✔';
+  renderTable();
+  patchRecord(id, { [airtableField]: item[itemField] });
+}
+
+// ── Delete ────────────────────────────────────────────────────────────
+function promptDelete(id, srNo, proj) {
+  pendingDelete = { id };
+  document.getElementById('confirm-body').innerHTML =
+    `This will permanently delete SR <b>${srNo}</b>:<br><b>${proj || '(no project name)'}</b><br><br>This cannot be undone.`;
+  document.getElementById('confirm-modal').style.display = 'flex';
+}
+function closeConfirm() { pendingDelete = null; document.getElementById('confirm-modal').style.display = 'none'; }
+function confirmDelete() { if (!pendingDelete) return; const id = pendingDelete.id; closeConfirm(); deleteRecord(id); }
+
+// ── KPIs ──────────────────────────────────────────────────────────────
+function renderKPIs() {
+  const c = { ALL:items.length, WON:0, LOST:0, CANCELLED:0, 'Under Process':0 };
+  items.forEach(r => { if (c[r.status] !== undefined) c[r.status]++; });
+  const cards = [
+    {k:'ALL',label:'Total',cls:''},
+    {k:'WON',label:'Won',cls:'won'},
+    {k:'Under Process',label:'In Progress',cls:'process'},
+    {k:'LOST',label:'Lost',cls:'lost'},
+    {k:'CANCELLED',label:'Cancelled',cls:'cancelled'},
+  ];
+  const el = document.getElementById('kpis');
+  el.innerHTML = cards.map(x => `
+    <div class="kpi ${x.cls} ${currentStatus===x.k?'active':''}" data-s="${x.k}">
+      <div class="kpi-lbl">${x.label}</div>
+      <div class="kpi-val">${c[x.k]}</div>
+    </div>`).join('');
+  el.querySelectorAll('.kpi').forEach(k => k.addEventListener('click', () => {
+    cancelEdit(); currentStatus = k.dataset.s; currentPage = 1; applyFilters(); renderKPIs();
+  }));
+}
+
+// ── Table ─────────────────────────────────────────────────────────────
+function applyFilters() {
+  const q = document.getElementById('search').value.toLowerCase();
+  filtered = items.filter(r => {
+    const ms = currentStatus === 'ALL' || r.status === currentStatus;
+    const mq = !q || [r.project, r.client, r.main_cont, r.sr_no].some(f => f.toLowerCase().includes(q));
+    return ms && mq;
+  });
+  renderTable(); renderPagination();
+}
+
+function badgeCls(s) { return s==='WON'?'b-won':s==='LOST'?'b-lost':s==='CANCELLED'?'b-cancelled':'b-process'; }
+function badgeLbl(s) { return s==='Under Process'?'In Progress':(s||'—'); }
+
+function mkTick(id, itemField, af, val) {
+  const on = val==='✔', empty = val!=='✔'&&val!=='✖';
+  return `<button class="tick ${empty?'na':on?'on':'off'}" data-id="${id}" data-if="${itemField}" data-af="${af}" title="${on?'Mark incomplete':'Mark complete'}">${empty?'–':on?'✔':'✖'}</button>`;
+}
+
+function mkDisplayRow(r) {
+  return `<tr data-id="${r._id}">
+    <td class="c-sr">${e(r.sr_no)}</td>
+    <td class="c-date" style="font-size:11px;color:var(--txt2)">${e(r.date)}</td>
+    <td class="c-proj" title="${e(r.project)}">${e(r.project)}</td>
+    <td class="c-mc">${e(r.main_cont)||'—'}</td>
+    <td class="c-client">${e(r.client)||'—'}</td>
+    <td class="c-rtu">${e(r.rtu)}</td>
+    <td class="c-status"><span class="badge ${badgeCls(r.status)}">${badgeLbl(r.status)}</span></td>
+    <td class="c-chk">${mkTick(r._id,'quotation',   F.QUOTATION,    r.quotation)}</td>
+    <td class="c-chk">${mkTick(r._id,'tech_prop',   F.TECH_PROP,    r.tech_prop)}</td>
+    <td class="c-chk">${mkTick(r._id,'lpo_client',  F.LPO_CLIENT,   r.lpo_client)}</td>
+    <td class="c-chk">${mkTick(r._id,'lpo_supplier',F.LPO_SUPPLIER, r.lpo_supplier)}</td>
+    <td class="c-actions">
+      <div class="row-actions">
+        <button class="icon-btn edit" data-id="${r._id}" title="Edit this row">${ICON_PENCIL}</button>
+        <button class="icon-btn del"  data-id="${r._id}" data-sr="${e(r.sr_no)}" data-proj="${e(r.project)}" title="Delete">${ICON_TRASH}</button>
+      </div>
+    </td>
+  </tr>`;
+}
+
+function mkEditRow(r) {
+  const statusOpts = ['Under Process','WON','LOST','CANCELLED']
+    .map(s => `<option value="${s}" ${r.status===s||( s==='Under Process'&&r.status==='Under Process')?'selected':''}>${s==='Under Process'?'In Progress':s}</option>`)
+    .join('');
+  return `<tr class="editing" data-id="${r._id}">
+    <td class="c-sr" style="color:var(--txt3);font-family:'IBM Plex Mono',monospace;font-size:11px">${e(r.sr_no)}</td>
+    <td class="c-date" style="overflow:visible"><input class="ei" id="ei-date" value="${e(r.date)}" placeholder="DD.MM.YYYY" style="width:88px"></td>
+    <td class="c-proj" style="overflow:visible"><input class="ei" id="ei-proj" value="${e(r.project)}" style="width:100%"></td>
+    <td class="c-mc" style="overflow:visible"><input class="ei" id="ei-mc" value="${e(r.main_cont)}" style="width:110px"></td>
+    <td class="c-client" style="overflow:visible"><input class="ei" id="ei-client" value="${e(r.client)}" style="width:80px"></td>
+    <td class="c-rtu" style="overflow:visible;text-align:center"><input class="ei" id="ei-rtu" value="${e(r.rtu)}" style="width:52px;text-align:center"></td>
+    <td class="c-status" style="overflow:visible"><select class="ei-select" id="ei-status" style="width:108px">${statusOpts}</select></td>
+    <td class="c-chk">${mkTick(r._id,'quotation',   F.QUOTATION,    r.quotation)}</td>
+    <td class="c-chk">${mkTick(r._id,'tech_prop',   F.TECH_PROP,    r.tech_prop)}</td>
+    <td class="c-chk">${mkTick(r._id,'lpo_client',  F.LPO_CLIENT,   r.lpo_client)}</td>
+    <td class="c-chk">${mkTick(r._id,'lpo_supplier',F.LPO_SUPPLIER, r.lpo_supplier)}</td>
+    <td class="c-actions">
+      <div class="row-actions">
+        <button class="icon-btn save" id="ei-save" title="Save changes (Enter)">${ICON_SAVE}</button>
+        <button class="icon-btn cancel-edit" id="ei-cancel" title="Cancel (Esc)">${ICON_CANCEL}</button>
+      </div>
+    </td>
+  </tr>`;
+}
+
+function renderTable() {
+  const start = (currentPage - 1) * PER_PAGE;
+  const page  = filtered.slice(start, start + PER_PAGE);
+  const total = filtered.length;
+  document.getElementById('meta').textContent =
+    total === 0 ? 'No results' : `${start+1}–${Math.min(start+PER_PAGE,total)} of ${total}`;
+
+  const tbody = document.getElementById('tbody');
+  tbody.innerHTML = page.map(r => r._id === editingId ? mkEditRow(r) : mkDisplayRow(r)).join('');
+
+  // Tick buttons
+  tbody.querySelectorAll('.tick').forEach(btn => btn.addEventListener('click', () =>
+    toggleTick(btn.dataset.id, btn.dataset.if, btn.dataset.af)
+  ));
+  // Edit buttons
+  tbody.querySelectorAll('.icon-btn.edit').forEach(btn => btn.addEventListener('click', () =>
+    startEdit(btn.dataset.id)
+  ));
+  // Delete buttons
+  tbody.querySelectorAll('.icon-btn.del').forEach(btn => btn.addEventListener('click', () =>
+    promptDelete(btn.dataset.id, btn.dataset.sr, btn.dataset.proj)
+  ));
+  // Save/cancel in edit row
+  const saveBtn   = document.getElementById('ei-save');
+  const cancelBtn = document.getElementById('ei-cancel');
+  if (saveBtn)   saveBtn.addEventListener('click', saveEditRow);
+  if (cancelBtn) cancelBtn.addEventListener('click', cancelEdit);
+}
+
+function renderPagination() {
+  const total = Math.ceil(filtered.length / PER_PAGE);
+  const info  = document.getElementById('pag-info');
+  const btns  = document.getElementById('pag-btns');
+  info.textContent = total > 1 ? `Page ${currentPage} of ${total}` : '';
+  if (total <= 1) { btns.innerHTML = ''; return; }
+  const pages = Array.from({length:total},(_,i)=>i+1);
+  const vis   = pages.filter(p => p===1||p===total||Math.abs(p-currentPage)<=1);
+  let h = `<button class="pag-btn" data-p="${currentPage-1}" ${currentPage===1?'disabled':''}>‹ prev</button>`;
+  let prev = 0;
+  vis.forEach(p => {
+    if (prev && p-prev>1) h += `<span class="pag-ellipsis">…</span>`;
+    h += `<button class="pag-btn ${p===currentPage?'active':''}" data-p="${p}">${p}</button>`;
+    prev = p;
+  });
+  h += `<button class="pag-btn" data-p="${currentPage+1}" ${currentPage===total?'disabled':''}>next ›</button>`;
+  btns.innerHTML = h;
+  btns.querySelectorAll('.pag-btn:not([disabled])').forEach(b => b.addEventListener('click', () => {
+    const p = +b.dataset.p; if(p<1||p>total) return;
+    cancelEdit(); currentPage=p; renderTable(); renderPagination();
+  }));
+}
+
+// ── New entry modal ───────────────────────────────────────────────────
+function showModal() {
+  const maxSr = Math.max(...items.map(i => parseInt(i.sr_no)||0), 17062);
+  const next  = maxSr + 1;
+  const now   = new Date();
+  const pad   = n => String(n).padStart(2,'0');
+  document.getElementById('f-sr').value     = next;
+  document.getElementById('modal-sr-lbl').textContent = `SR-${next}`;
+  document.getElementById('f-date').value   = `${pad(now.getDate())}.${pad(now.getMonth()+1)}.${now.getFullYear()}`;
+  document.getElementById('f-cont').value   = 'MBB';
+  document.getElementById('f-status').value = 'Under Process';
+  ['f-proj','f-mc','f-client','f-rtu','f-prop'].forEach(id => document.getElementById(id).value='');
+  document.getElementById('modal').style.display = 'flex';
+  setTimeout(() => document.getElementById('f-proj').focus(), 50);
+}
+function closeModal() { document.getElementById('modal').style.display='none'; }
+function saveEntry() {
+  const g = id => document.getElementById(id).value.trim();
+  const proj = g('f-proj');
+  if (!proj) { document.getElementById('f-proj').focus(); return; }
+  closeModal();
+  postRecord({
+    [F.SR_NO]:        g('f-sr'),
+    [F.DATE]:         g('f-date'),
+    [F.PROJECT]:      proj,
+    [F.CONTRACTOR]:   g('f-cont') || 'MBB',
+    [F.MAIN_CONT]:    g('f-mc'),
+    [F.CLIENT]:       g('f-client'),
+    [F.RTU]:          g('f-rtu') || '--',
+    [F.STATUS]:       g('f-status'),
+    [F.PROPOSAL]:     g('f-prop') || '--',
+    [F.QUOTATION]:    '✖',
+    [F.TECH_PROP]:    '✖',
+    [F.LPO_CLIENT]:   '✖',
+    [F.LPO_SUPPLIER]: '✖',
+  });
+}
+
+// ── Debug ─────────────────────────────────────────────────────────────
+async function showFieldNames() {
+  try {
+    const res  = await fetch(API + '?maxRecords=1', { headers: HEADERS });
+    const data = await res.json();
+    const fields = Object.keys(data.records?.[0]?.fields || {});
+    showError('<b>Your actual Airtable column names:</b><br><br>' +
+      fields.map(f => `&nbsp;&nbsp;<code style="background:#eee;padding:1px 5px;border-radius:3px;font-size:12px">${f}</code>`).join('<br>'));
+  } catch(e) { showError('Could not fetch: ' + e.message); }
+}
+
+// ── Utilities ─────────────────────────────────────────────────────────
+function e(v) { return String(v||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function setSave(state) {
+  const ind = document.getElementById('save-ind');
+  const txt = document.getElementById('save-txt');
+  ind.className = 'save-ind'+(state==='saved'?' saved':state==='saving'?' saving':state==='err'?' err':'');
+  txt.textContent = {loading:'loading…',saving:'saving…',saved:'saved ✔',err:'save failed',ready:'connected'}[state]||state;
+}
+
+function showError(msg) {
+  const el = document.getElementById('err-banner');
+  el.innerHTML = msg; el.style.display='block';
+}
+
+let toastTimer;
+function toast(msg, type) {
+  const t = document.getElementById('toast');
+  clearTimeout(toastTimer);
+  t.textContent = msg;
+  t.className = 'toast show'+(type==='ok'?' ok':type==='err'?' err':'');
+  toastTimer = setTimeout(()=>{ t.className='toast'+(type==='ok'?' ok':type==='err'?' err':''); }, 3000);
+}
+</script>
+</body>
+</html>
