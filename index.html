@@ -300,7 +300,7 @@ tr:hover .icon-btn,tr.editing .icon-btn{opacity:1}
             <th class="c-chk ctr" data-col="c-chk-tp" title="Technical Proposal">TP<div class="col-resizer"></div></th>
             <th class="c-chk ctr" data-col="c-chk-lpoc" title="LPO from Client">LPO-C<div class="col-resizer"></div></th>
             <th class="c-chk ctr" data-col="c-chk-lpos" title="LPO MBB to Supplier">LPO-S<div class="col-resizer"></div></th>
-            <th class="c-active ctr" data-col="c-active">Active<div class="col-resizer"></div></th>
+            <th class="c-active ctr" data-col="c-active">Active (working on)<div class="col-resizer"></div></th>
             <th class="c-deadline sortable" data-col="c-deadline" data-sort="deadline">Deadline<span class="sort-icon">&#8597;</span><div class="col-resizer"></div></th>
             <th class="c-update sortable" data-col="c-update" data-sort="last_update">Last Update<span class="sort-icon">&#8597;</span><div class="col-resizer"></div></th>
             <th class="c-actions"><div class="col-resizer"></div></th>
@@ -390,7 +390,7 @@ var F = {
 
 var HEADERS = {'Content-Type':'application/json'};
 var allRecords = [], items = [], filtered = [];
-var currentStatus = 'ACTIVE_ONLY';
+var currentStatus = 'ALL';
 var currentPage = 1;
 var PER_PAGE = 15;
 var editingId = null;
@@ -686,8 +686,8 @@ function renderKPIs(){
     if(c[r.status]!==undefined) c[r.status]++;
   });
   var cards=[
-    {k:'ACTIVE_ONLY',label:'Active',cls:'activefilter'},
-    {k:'ALL',label:'All',cls:''},
+    {k:'ALL',label:'All Enquiries',cls:''},
+    {k:'ACTIVE_ONLY',label:'Active (working on)',cls:'activefilter'},
     {k:'WON',label:'Won',cls:'won'},
     {k:'Under Process',label:'In Progress',cls:'process'},
     {k:'LOST',label:'Lost',cls:'lost'},
