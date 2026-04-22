@@ -24,6 +24,10 @@ html,body{min-height:100%;background:var(--bg);color:var(--txt);font-family:'IBM
 ::-webkit-scrollbar-track{background:var(--bg2)}
 ::-webkit-scrollbar-thumb{background:var(--bg3);border-radius:3px}
 
+
+/* Edit modal */
+#edit-modal .modal-title{color:var(--txt)}
+
 /* Login */
 #login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
 .lcard{background:var(--bg);border:1px solid var(--bdr2);border-radius:16px;padding:48px 52px;max-width:400px;width:100%;text-align:center;box-shadow:0 4px 24px rgba(0,0,0,.08)}
@@ -137,7 +141,7 @@ td{padding:8px 11px;vertical-align:middle;overflow:hidden;text-overflow:ellipsis
 .c-chk{width:44px;text-align:center}
 .c-active{width:56px;text-align:center}
 .c-deadline{width:110px}
-.c-update{width:120px;font-size:12px;color:var(--txt2)}
+.c-update{width:90px;font-size:12px;color:var(--txt2)}
 .c-actions{width:68px;text-align:right}
 
 /* Badges */
@@ -345,6 +349,39 @@ tr:hover .icon-btn,tr.editing .icon-btn{opacity:1}
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeModal()">Cancel</button>
       <button class="btn-pri" onclick="saveEntry()">Add Opportunity</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- EDIT OPPORTUNITY MODAL -->
+<div class="modal-bg" id="edit-modal" style="display:none">
+  <div class="modal">
+    <div class="modal-title">Edit Opportunity <span id="edit-sr-lbl"></span></div>
+    <div class="form-grid">
+      <div class="field"><label>SR Number</label><input id="ef-sr" readonly></div>
+      <div class="field"><label>Enquiry Date</label><input id="ef-date" placeholder="DD.MM.YYYY"></div>
+      <div class="field full"><label>Project Name *</label><input id="ef-proj" placeholder="Full project name or tender reference"></div>
+      <div class="field"><label>Contractor</label><input id="ef-cont"></div>
+      <div class="field"><label>Main Contractor</label><input id="ef-mc" placeholder="e.g. NPC, IDS, Lucy"></div>
+      <div class="field"><label>Client</label><input id="ef-client" placeholder="e.g. ADDC, TAQA, NEDC"></div>
+      <div class="field"><label>RTU / Substations</label><input id="ef-rtu" placeholder="e.g. 5"></div>
+      <div class="field"><label>Status</label>
+        <select id="ef-status">
+          <option value="PIPELINE">Pipeline</option>
+          <option value="WON">WON</option>
+          <option value="LOST">LOST</option>
+          <option value="CANCELLED">CANCELLED</option>
+          <option value="CLOSED">CLOSED</option>
+        </select>
+      </div>
+      <div class="field"><label>Proposal Submitted On</label><input id="ef-prop" placeholder="DD.MM.YYYY"></div>
+      <div class="field"><label>Upcoming Deadline</label><input id="ef-deadline" type="date"></div>
+      <div class="field full"><label>Last Update</label><input id="ef-update" placeholder="e.g. Proposal submitted, awaiting LPO&hellip;"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeEditModal()">Cancel</button>
+      <button class="btn-pri" onclick="saveEditModal()">Save Changes</button>
     </div>
   </div>
 </div>
@@ -726,7 +763,7 @@ function badgeLbl(st){return st==='Under Process'?'Pipeline':(st||'&mdash;');}
 var STATUS_OPTS=['PIPELINE','WON','LOST','CANCELLED','CLOSED'];
 
 function mkDisplayRow(r){
-  return '<tr data-id="'+r._id+'">'+
+  return '<tr data-id="'+r._id+'" style="cursor:pointer">'+
     '<td class="c-sr">'+e(r.sr_no)+'</td>'+
     '<td class="c-date">'+e(r.date)+'</td>'+
     '<td class="c-proj" title="'+e(r.project)+'">'+e(r.project)+'</td>'+
@@ -749,7 +786,7 @@ function mkDisplayRow(r){
 }
 
 function mkEditRow(r){
-  var opts=STATUS_OPTS.map(function(st){return '<option value="'+st+'"'+(r.status===st?' selected':'')+'>'+( st==='Under Process'?'In Progress':st)+'</option>';}).join('');
+  var opts=STATUS_OPTS.map(function(st){return '<option value="'+st+'"'+(r.status===st?' selected':'')+'>'+( st==='PIPELINE'?'Pipeline':st)+'</option>';}).join('');
   return '<tr class="editing" data-id="'+r._id+'">'+
     '<td class="c-sr" style="font-family:\'IBM Plex Mono\',monospace;font-size:11px;color:var(--txt3)">'+e(r.sr_no)+'</td>'+
     '<td class="c-date" style="overflow:visible"><input class="ei" id="ei-date" value="'+e(r.date)+'" placeholder="DD.MM.YYYY" style="width:88px"></td>'+
@@ -764,7 +801,7 @@ function mkEditRow(r){
     '<td class="c-chk">'+mkTick(r._id,'lpo_supplier',F.LPO_SUPPLIER,r.lpo_supplier)+'</td>'+
     '<td class="c-active">'+mkTick(r._id,'active',F.ACTIVE,r.active)+'</td>'+
     '<td class="c-deadline" style="overflow:visible"><input class="ei" id="ei-deadline" type="date" value="'+e(r.deadline)+'" style="width:130px"></td>'+
-    '<td class="c-update" style="overflow:visible"><input class="ei" id="ei-update" value="'+e(r.last_update)+'" placeholder="Latest update&hellip;" style="width:112px"></td>'+
+    '<td class="c-update" style="overflow:visible"><input class="ei" id="ei-update" value="'+e(r.last_update)+'" placeholder="Latest update&hellip;" style="width:300px"></td>'+
     '<td class="c-actions"><div class="row-actions">'+
       '<button class="icon-btn save" onclick="saveEditRow()" title="Save (Enter)">'+IC_SAVE+'</button>'+
       '<button class="icon-btn cancel-edit" onclick="cancelEdit()" title="Cancel (Esc)">'+IC_CANCEL+'</button>'+
@@ -779,6 +816,13 @@ function renderTable(){
   document.getElementById('meta').textContent=total===0?'No results':(start+1)+'\u2013'+Math.min(start+PER_PAGE,total)+' of '+total;
   var tbody=document.getElementById('tbody');
   tbody.innerHTML=page.map(function(r){return r._id===editingId?mkEditRow(r):mkDisplayRow(r);}).join('');
+  // Double-click anywhere on a row to open edit modal
+  tbody.addEventListener('dblclick', function(ev) {
+    var row = ev.target.closest('tr[data-id]');
+    if(row && !row.classList.contains('editing')) {
+      openEditModal(row.dataset.id);
+    }
+  });
   initSortHeaders();
   initColumnResize();
 }
@@ -856,7 +900,7 @@ function clearDates(){document.getElementById('date-from').value='';document.get
 
 // Keyboard shortcuts
 document.addEventListener('keydown',function(ev){
-  if(ev.key==='Escape'){cancelEdit();closeConfirm();closeModal();}
+  if(ev.key==='Escape'){cancelEdit();closeConfirm();closeModal();closeEditModal();}
   if(ev.key==='Enter'&&editingId) saveEditRow();
 });
 
@@ -905,6 +949,69 @@ async function showFieldNames(){
     showError('<b>Airtable column names:</b><br><br>'+flds.map(function(f){return '&nbsp;&nbsp;<code style="background:#eee;padding:1px 5px;border-radius:3px;font-size:12px">'+f+'</code>';}).join('<br>'));
   }catch(err){showError('Could not fetch: '+err.message);}
 }
+
+
+// ── Edit Modal (double-click) ─────────────────────────────────────
+function openEditModal(id) {
+  var item = items.find(function(i){ return i._id === id; });
+  if(!item) return;
+  document.getElementById('edit-modal').dataset.id = id;
+  document.getElementById('edit-sr-lbl').textContent = 'SR-' + item.sr_no;
+  document.getElementById('ef-sr').value       = item.sr_no;
+  document.getElementById('ef-date').value     = item.date;
+  document.getElementById('ef-proj').value     = item.project;
+  document.getElementById('ef-cont').value     = item.contractor;
+  document.getElementById('ef-mc').value       = item.main_cont;
+  document.getElementById('ef-client').value   = item.client;
+  document.getElementById('ef-rtu').value      = item.rtu === '--' ? '' : item.rtu;
+  document.getElementById('ef-status').value   = item.status;
+  document.getElementById('ef-prop').value     = item.proposal;
+  document.getElementById('ef-deadline').value = item.deadline || '';
+  document.getElementById('ef-update').value   = item.last_update;
+  document.getElementById('edit-modal').style.display = 'flex';
+  setTimeout(function(){ document.getElementById('ef-proj').focus(); }, 50);
+}
+function closeEditModal() {
+  document.getElementById('edit-modal').style.display = 'none';
+}
+async function saveEditModal() {
+  var id = document.getElementById('edit-modal').dataset.id;
+  if(!id) return;
+  function g(eid){ var el=document.getElementById(eid); return el?el.value.trim():''; }
+  var proj = g('ef-proj');
+  if(!proj){ document.getElementById('ef-proj').focus(); return; }
+  var fields = {};
+  fields[F.DATE]        = g('ef-date');
+  fields[F.PROJECT]     = proj;
+  fields[F.CONTRACTOR]  = g('ef-cont') || 'MBB';
+  fields[F.MAIN_CONT]   = g('ef-mc');
+  fields[F.CLIENT]      = g('ef-client');
+  fields[F.RTU]         = g('ef-rtu') || '--';
+  fields[F.STATUS]      = g('ef-status');
+  fields[F.PROPOSAL]    = g('ef-prop');
+  fields[F.LAST_UPDATE] = g('ef-update');
+  var dlVal = document.getElementById('ef-deadline').value;
+  if(dlVal) fields[F.DEADLINE] = dlVal;
+  // Update local item
+  var item = items.find(function(i){ return i._id === id; });
+  if(item){
+    item.date=fields[F.DATE]; item.project=fields[F.PROJECT];
+    item.contractor=fields[F.CONTRACTOR]; item.main_cont=fields[F.MAIN_CONT];
+    item.client=fields[F.CLIENT]; item.rtu=fields[F.RTU]||'--';
+    item.status=normStatus(fields[F.STATUS]); item.proposal=fields[F.PROPOSAL];
+    item.last_update=fields[F.LAST_UPDATE];
+    if(dlVal) item.deadline=dlVal;
+    var rec=allRecords.find(function(r){return r.id===id;});
+    if(rec){
+      Object.keys(fields).forEach(function(k){ rec.fields[k]=fields[k]; });
+    }
+  }
+  closeEditModal();
+  renderKPIs(); applyFilters();
+  await patchRecord(id, fields);
+  toast('Changes saved','ok');
+}
+document.getElementById('edit-modal').addEventListener('click', function(ev){ if(ev.target===this) closeEditModal(); });
 
 // ── Export Report ─────────────────────────────────────────────────
 function exportReport(){
