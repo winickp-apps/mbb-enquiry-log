@@ -331,7 +331,7 @@ tr:hover .icon-btn,tr.editing .icon-btn{opacity:1}
       <div class="field"><label>RTU / Substations</label><input id="f-rtu" placeholder="e.g. 5"></div>
       <div class="field"><label>Status</label>
         <select id="f-status">
-          <option value="Under Process">Under Process</option>
+          <option value="PIPELINE">Pipeline</option>
           <option value="WON">WON</option>
           <option value="LOST">LOST</option>
           <option value="CANCELLED">CANCELLED</option>
@@ -411,7 +411,7 @@ var IC_TRASH  = '<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><pa
 // ── Helpers ──────────────────────────────────────────────────────
 function s(v) { return (v === null || v === undefined) ? '' : String(v).trim(); }
 function e(v) { return String(v||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-function normStatus(v) { if(!v) return ''; if(v.indexOf('Under Process')!==-1) return 'Under Process'; return v; }
+function normStatus(v) { if(!v) return ''; if(v.indexOf('Under Process')!==-1||v==='Pipeline'||v==='PIPELINE') return 'PIPELINE'; return v; }
 
 function parseDMY(str) {
   if(!str) return null;
@@ -680,7 +680,7 @@ function confirmDelete(){if(!pendingDeleteId)return;var id=pendingDeleteId;close
 
 // ── KPIs ─────────────────────────────────────────────────────────
 function renderKPIs(){
-  var c={ALL:items.length,ACTIVE_ONLY:0,WON:0,LOST:0,CANCELLED:0,'Under Process':0,CLOSED:0};
+  var c={ALL:items.length,ACTIVE_ONLY:0,WON:0,LOST:0,CANCELLED:0,PIPELINE:0,CLOSED:0};
   items.forEach(function(r){
     if(r.active==='Yes') c.ACTIVE_ONLY++;
     if(c[r.status]!==undefined) c[r.status]++;
@@ -689,7 +689,7 @@ function renderKPIs(){
     {k:'ALL',label:'All Enquiries',cls:''},
     {k:'ACTIVE_ONLY',label:'Active (working on)',cls:'activefilter'},
     {k:'WON',label:'Won',cls:'won'},
-    {k:'Under Process',label:'In Progress',cls:'process'},
+    {k:'PIPELINE',label:'Pipeline',cls:'process'},
     {k:'LOST',label:'Lost',cls:'lost'},
     {k:'CANCELLED',label:'Cancelled',cls:'cancelled'},
     {k:'CLOSED',label:'Closed',cls:'closed'}
@@ -720,9 +720,9 @@ function applyFilters(){
 }
 
 function badgeCls(st){return st==='WON'?'b-won':st==='LOST'?'b-lost':st==='CANCELLED'?'b-cancelled':st==='CLOSED'?'b-closed':'b-process';}
-function badgeLbl(st){return st==='Under Process'?'In Progress':(st||'&mdash;');}
+function badgeLbl(st){return st==='Under Process'?'Pipeline':(st||'&mdash;');}
 
-var STATUS_OPTS=['Under Process','WON','LOST','CANCELLED','CLOSED'];
+var STATUS_OPTS=['PIPELINE','WON','LOST','CANCELLED','CLOSED'];
 
 function mkDisplayRow(r){
   return '<tr data-id="'+r._id+'">'+
@@ -869,7 +869,7 @@ function showModal(){
   document.getElementById('modal-sr-lbl').textContent='SR-'+next;
   document.getElementById('f-date').value=pad(now.getDate())+'.'+pad(now.getMonth()+1)+'.'+now.getFullYear();
   document.getElementById('f-cont').value='MBB';
-  document.getElementById('f-status').value='Under Process';
+  document.getElementById('f-status').value='PIPELINE';
   ['f-proj','f-mc','f-client','f-rtu','f-prop','f-update'].forEach(function(id){document.getElementById(id).value='';});
   document.getElementById('f-deadline').value='';
   document.getElementById('modal').style.display='flex';
