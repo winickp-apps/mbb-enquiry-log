@@ -595,7 +595,8 @@ async function patchRecord(id,fields) {
 async function postRecord(fields) {
   setSave('saving');
   try {
-    var res=await fetch(WORKER_URL,{method:'POST',headers:HEADERS,body:JSON.stringify({fields:fields})});
+    var clean={};Object.keys(fields).forEach(function(k){if(fields[k]!==''&&fields[k]!==null&&fields[k]!==undefined)clean[k]=fields[k];});
+    var res=await fetch(WORKER_URL,{method:'POST',headers:HEADERS,body:JSON.stringify({fields:clean})});
     var data=await res.json();
     if(!res.ok) throw new Error((data.error&&data.error.message)||'HTTP '+res.status);
     allRecords.push(data); parseItems(); setSave('saved');
@@ -889,7 +890,7 @@ function saveEntry(){
   fields[F.CONTRACTOR]=g('f-cont')||'MBB'; fields[F.MAIN_CONT]=g('f-mc');
   fields[F.CLIENT]=g('f-client'); fields[F.RTU]=g('f-rtu')||'--';
   fields[F.STATUS]=g('f-status'); fields[F.PROPOSAL]=g('f-prop')||'--';
-  fields[F.DEADLINE]=document.getElementById('f-deadline').value||'';
+  var dlVal=document.getElementById('f-deadline').value; if(dlVal) fields[F.DEADLINE]=dlVal;
   fields[F.LAST_UPDATE]=g('f-update');
   fields[F.QUOTATION]=''; fields[F.TECH_PROP]=''; fields[F.LPO_CLIENT]=''; fields[F.LPO_SUPPLIER]='';
   postRecord(fields);
