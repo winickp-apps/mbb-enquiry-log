@@ -28,6 +28,31 @@ html,body{min-height:100%;background:var(--bg);color:var(--txt);font-family:'IBM
 /* Edit modal */
 #edit-modal .modal-title{color:var(--txt)}
 
+
+
+/* Vendor screen */
+#vendor-screen{display:none}
+.vnd-kpi-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:20px}
+.vnd-badge{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:500;padding:2px 8px;border-radius:20px;white-space:nowrap;background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-bdr)}
+.c-vendor{width:130px;font-weight:500}
+.c-item{width:130px}
+.c-desc{max-width:0;white-space:normal !important;line-height:1.4;padding-top:6px !important;padding-bottom:6px !important}
+.c-rate{width:90px;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:11px}
+.c-price{width:100px;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:500;color:var(--green)}
+
+/* Home screen */
+#home-screen{display:none;min-height:calc(100vh - 58px);background:var(--bg2);padding:60px 40px}
+.home-wrap{max-width:800px;margin:0 auto}
+.home-title{font-size:22px;font-weight:600;color:var(--txt);margin-bottom:8px;letter-spacing:-.3px}
+.home-sub{font-size:13px;color:var(--txt3);margin-bottom:40px;font-family:'IBM Plex Mono',monospace}
+.home-cards{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.home-card{background:var(--bg);border:1px solid var(--bdr2);border-radius:var(--rl);padding:32px 28px;cursor:pointer;transition:border-color .2s,box-shadow .2s,transform .15s}
+.home-card:hover{border-color:var(--amber-bdr);box-shadow:0 4px 20px rgba(227,98,9,.10);transform:translateY(-2px)}
+.home-card-icon{font-size:28px;margin-bottom:16px}
+.home-card-title{font-size:17px;font-weight:600;color:var(--txt);margin-bottom:8px;letter-spacing:-.2px}
+.home-card-desc{font-size:13px;color:var(--txt3);line-height:1.6}
+.home-card-arrow{margin-top:20px;font-size:13px;color:var(--amber);font-weight:600}
+
 /* Login */
 #login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
 .lcard{background:var(--bg);border:1px solid var(--bdr2);border-radius:16px;padding:48px 52px;max-width:400px;width:100%;text-align:center;box-shadow:0 4px 24px rgba(0,0,0,.08)}
@@ -218,15 +243,48 @@ tr:hover .icon-btn,tr.editing .icon-btn{opacity:1}
 </head>
 <body>
 
+<!-- HOME SCREEN (after login) -->
+<div id="home-screen" style="display:none">
+  <div class="top-bar">
+    <div class="brand-line">
+      <div class="bdot"></div>
+      <div>
+        <div class="bname">mBELLAb Power Solutions</div>
+        <div class="bsub">Operations Portal</div>
+      </div>
+    </div>
+    <div class="hdr-r">
+      <div class="save-ind" id="home-save-ind"><div class="sdot"></div><span id="home-save-txt">connected</span></div>
+    </div>
+  </div>
+  <div class="home-wrap" style="padding-top:60px;padding-bottom:40px;max-width:800px;margin:0 auto;padding-left:40px;padding-right:40px">
+    <div class="home-sub">mBELLAb Power Solutions &nbsp;&middot;&nbsp; Select a module to continue</div>
+    <div class="home-cards">
+      <div class="home-card" onclick="showOpportunities()">
+        <div class="home-card-icon">&#128203;</div>
+        <div class="home-card-title">mBELLAb Opportunities</div>
+        <div class="home-card-desc">Customer enquiry log, pipeline tracking, proposal status and LPO management.</div>
+        <div class="home-card-arrow">Open &rarr;</div>
+      </div>
+      <div class="home-card" onclick="showVendors()">
+        <div class="home-card-icon">&#128230;</div>
+        <div class="home-card-title">Vendor Equipment Pricing</div>
+        <div class="home-card-desc">Vendor catalogue, equipment sourcing, rates and pricing reference.</div>
+        <div class="home-card-arrow">Open &rarr;</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- LOGIN -->
-<div id="login-screen">
+<div id="login-screen" style="display:flex">
   <div class="lcard">
     <div class="ldot"></div>
     <div class="ltitle">mBELLAb Power Solutions</div>
     <div class="lsub">Customer Enquiry Log &middot; mBb-FM-13</div>
     <div class="lfield">
       <label>Password</label>
-      <input class="linput" id="login-pwd" type="password" placeholder="Enter password" autocomplete="current-password">
+      <input class="linput" id="login-pwd" type="password" placeholder="Enter password" autocomplete="current-password" onkeydown="if(event.key==='Enter')attemptLogin()">
     </div>
     <button class="lbtn" onclick="attemptLogin()">Sign in</button>
     <div class="lerr" id="login-error"></div>
@@ -234,7 +292,7 @@ tr:hover .icon-btn,tr.editing .icon-btn{opacity:1}
 </div>
 
 <!-- LOADING -->
-<div id="loading">
+<div id="loading" style="display:none">
   <div class="lc-card">
     <div class="lc-brand">mBELLAb Power Solutions</div>
     <div class="lc-sub">Customer Enquiry Log &middot; mBb-FM-13</div>
@@ -245,7 +303,7 @@ tr:hover .icon-btn,tr.editing .icon-btn{opacity:1}
 </div>
 
 <!-- APP -->
-<div id="app">
+<div id="app" style="display:none">
   <div class="top-bar">
     <div class="brand-line">
       <div class="bdot"></div>
@@ -257,6 +315,7 @@ tr:hover .icon-btn,tr.editing .icon-btn{opacity:1}
     <div class="hdr-r">
       <div class="save-ind" id="save-ind"><div class="sdot"></div><span id="save-txt">connecting&hellip;</span></div>
       <button class="btn-ghost" onclick="showFieldNames()">Debug fields</button>
+      <button class="btn-ghost" onclick="showVendors()">&#128230; Vendor Pricing</button>
       <button class="btn-ghost" onclick="exportReport()">&#8681; Export</button>
       <button class="btn-pri" onclick="showModal()">+ New Opportunity</button>
     </div>
@@ -382,6 +441,78 @@ tr:hover .icon-btn,tr.editing .icon-btn{opacity:1}
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeEditModal()">Cancel</button>
       <button class="btn-pri" onclick="saveEditModal()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- VENDOR EQUIPMENT PRICING SCREEN -->
+<div id="vendor-screen" style="display:none">
+  <div class="top-bar">
+    <div class="brand-line">
+      <div class="bdot"></div>
+      <div>
+        <div class="bname">mBELLAb Power Solutions</div>
+        <div class="bsub">Vendor Equipment Pricing</div>
+      </div>
+    </div>
+    <div class="hdr-r">
+      <div class="save-ind" id="vnd-save-ind"><div class="sdot"></div><span id="vnd-save-txt">connected</span></div>
+      <button class="btn-ghost" onclick="showOpportunities()">&#128203; mBELLAb Opportunities</button>
+      <button class="btn-ghost" onclick="showHome()">&larr; Home</button>
+      <button class="btn-pri" onclick="showVendorModal()">+ Add Item</button>
+    </div>
+  </div>
+  <div class="body-wrap">
+    <div class="err-banner" id="vnd-err-banner"></div>
+    <div class="kpi-grid vnd-kpi-grid" id="vnd-kpis"></div>
+
+    <div class="filter-bar">
+      <div class="search-wrap">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+          <circle cx="6.5" cy="6.5" r="5" stroke="#8C959F" stroke-width="1.5"/>
+          <path d="M10.5 10.5L14 14" stroke="#8C959F" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <input class="search" id="vnd-search" type="text" placeholder="Search vendor, item, description&hellip;" oninput="renderVendorTable()">
+      </div>
+      <div class="result-meta" id="vnd-meta"></div>
+    </div>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th class="c-vendor sortable" data-vnd-sort="Vendor">Vendor<span class="sort-icon">&#8597;</span></th>
+            <th class="c-item sortable" data-vnd-sort="Item">Item<span class="sort-icon">&#8597;</span></th>
+            <th class="c-desc">Description</th>
+            <th class="c-rate" style="text-align:right" data-vnd-sort="Rate">Rate<span class="sort-icon">&#8597;</span></th>
+            <th class="c-price" style="text-align:right" data-vnd-sort="Price">Price<span class="sort-icon">&#8597;</span></th>
+            <th class="c-actions"></th>
+          </tr>
+        </thead>
+        <tbody id="vnd-tbody"></tbody>
+      </table>
+    </div>
+    <div class="pag">
+      <div class="pag-info" id="vnd-pag-info"></div>
+      <div class="pag-btns" id="vnd-pag-btns"></div>
+    </div>
+  </div>
+</div>
+
+<!-- VENDOR MODAL -->
+<div class="modal-bg" id="vendor-modal" style="display:none">
+  <div class="modal">
+    <div class="modal-title" id="vendor-modal-title">Add Vendor Item</div>
+    <div class="form-grid">
+      <div class="field"><label>Vendor *</label><input id="vf-vendor" placeholder="e.g. Lucy Electric"></div>
+      <div class="field"><label>Item *</label><input id="vf-item" placeholder="e.g. RTU 560"></div>
+      <div class="field full"><label>Description</label><input id="vf-desc" placeholder="Brief description of equipment"></div>
+      <div class="field"><label>Rate</label><input id="vf-rate" placeholder="e.g. Per unit"></div>
+      <div class="field"><label>Price</label><input id="vf-price" placeholder="e.g. 4500.00"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeVendorModal()">Cancel</button>
+      <button class="btn-pri" onclick="saveVendorItem()">Save Item</button>
     </div>
   </div>
 </div>
@@ -536,16 +667,17 @@ function attemptLogin() {
   sessionStorage.setItem('mbb_pwd',pwd);
   HEADERS['X-App-Password']=pwd;
   document.getElementById('login-screen').style.display='none';
-  document.getElementById('loading').style.display='flex';
-  loadAll();
+  showHome();
 }
 
 // Auto-login if cached
 if(appPassword){
   HEADERS['X-App-Password']=appPassword;
   document.getElementById('login-screen').style.display='none';
-  document.getElementById('loading').style.display='flex';
-  loadAll();
+  var lastScreen = sessionStorage.getItem('mbb_screen') || 'home';
+  if(lastScreen === 'opportunities') showOpportunities();
+  else if(lastScreen === 'vendors') showVendors();
+  else showHome();
 } else {
   document.getElementById('login-screen').style.display='flex';
 }
@@ -724,7 +856,7 @@ function renderKPIs(){
     if(c[r.status]!==undefined) c[r.status]++;
   });
   var cards=[
-    {k:'ALL',label:'All Enquiries',cls:''},
+    {k:'ALL',label:'All Opportunities',cls:''},
     {k:'ACTIVE_ONLY',label:'Active (working on)',cls:'activefilter'},
     {k:'WON',label:'Won',cls:'won'},
     {k:'PIPELINE',label:'Pipeline',cls:'process'},
@@ -1012,6 +1144,292 @@ async function saveEditModal() {
   toast('Changes saved','ok');
 }
 document.getElementById('edit-modal').addEventListener('click', function(ev){ if(ev.target===this) closeEditModal(); });
+
+
+// ================================================================
+// NAVIGATION
+// ================================================================
+var VENDOR_TABLE = 'Vendor%20Equipment%20Pricing';
+var vndRecords = [];
+var vndSortField = 'Vendor';
+var vndSortDir = 'asc';
+var vndPage = 1;
+var VND_PER_PAGE = 20;
+var vndEditId = null;
+
+function showHome() {
+  sessionStorage.setItem('mbb_screen','home');
+  document.getElementById('home-screen').style.display = 'block';
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('vendor-screen').style.display = 'none';
+}
+function showOpportunities() {
+  sessionStorage.setItem('mbb_screen','opportunities');
+  document.getElementById('home-screen').style.display = 'none';
+  document.getElementById('vendor-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  // Always reload — ensures fresh data on refresh
+  document.getElementById('loading').style.display = 'flex';
+  document.getElementById('app').style.display = 'none';
+  loadAll();
+}
+function showVendors() {
+  sessionStorage.setItem('mbb_screen','vendors');
+  document.getElementById('home-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('vendor-screen').style.display = 'block';
+  loadVendors();
+}
+
+// Override initApp to show home screen instead of going straight to opportunities
+function initApp() {
+  HEADERS['X-App-Password'] = appPassword;
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('loading').style.display = 'none';
+  showHome();
+}
+
+// ================================================================
+// VENDOR DATA
+// ================================================================
+async function loadVendors() {
+  setVndSave('loading');
+  // Show loading state in table immediately
+  var tbody = document.getElementById('vnd-tbody');
+  if(tbody) tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--txt3);font-size:13px">Loading…</td></tr>';
+  var errBanner = document.getElementById('vnd-err-banner');
+  try {
+    var records = [], offset = null;
+    do {
+      var url = WORKER_URL+'/vendor?pageSize=100'+(offset?'&offset='+encodeURIComponent(offset):'');
+      var res = await fetch(url, { headers: HEADERS });
+      if(!res.ok){ var er=await res.json().catch(function(){return{};}); throw new Error((er.error&&er.error.message)||'HTTP '+res.status); }
+      var data = await res.json();
+      records = records.concat(data.records||[]);
+      offset = data.offset||null;
+    } while(offset);
+    vndRecords = records;
+    setVndSave('ready');
+    renderVendorKPIs();
+    renderVendorTable();
+  } catch(err) {
+    setVndSave('err');
+    if(errBanner){ errBanner.innerHTML='<b>Failed to load vendor data:</b> '+err.message; errBanner.style.display='block'; }
+    toast('Failed to load vendors: '+err.message,'err');
+  }
+}
+
+function setVndSave(state) {
+  var ind = document.getElementById('vnd-save-ind');
+  var txt = document.getElementById('vnd-save-txt');
+  if(!ind || !txt) return;
+  ind.className = 'save-ind' + (state==='ready'?' saved':state==='loading'?' saving':state==='err'?' err':'');
+  var msgs = {loading:'loading…', ready:'connected ✔', err:'error', saving:'saving…', saved:'saved ✔'};
+  txt.textContent = msgs[state] || state;
+}
+
+function renderVendorKPIs() {
+  var vendors = {};
+  vndRecords.forEach(function(r){ var v = r.fields['Vendor']||''; if(v) vendors[v] = true; });
+  var el = document.getElementById('vnd-kpis');
+  if(!el) return;
+  el.innerHTML = [
+    {label:'Total Items', val: vndRecords.length, cls:''},
+    {label:'Vendors', val: Object.keys(vendors).length, cls:'process'},
+    {label:'Showing', val: document.getElementById('vnd-tbody') ? document.getElementById('vnd-tbody').querySelectorAll('tr').length : 0, cls:'won'},
+  ].map(function(x){
+    return '<div class="kpi '+x.cls+'"><div class="kpi-lbl">'+x.label+'</div><div class="kpi-val">'+x.val+'</div></div>';
+  }).join('');
+}
+
+function renderVendorTable() {
+  var q = (document.getElementById('vnd-search')||{value:''}).value.toLowerCase();
+  var rows = vndRecords.filter(function(r){
+    var f = r.fields;
+    return !q || ['Vendor','Item','Description'].some(function(k){ return (f[k]||'').toLowerCase().indexOf(q) !== -1; });
+  });
+
+  // Sort
+  rows.sort(function(a, b){
+    var av = String(a.fields[vndSortField]||''), bv = String(b.fields[vndSortField]||'');
+    if(vndSortField === 'Price' || vndSortField === 'Rate') {
+      av = parseFloat(av.replace(/[^0-9.-]/g,''))||0;
+      bv = parseFloat(bv.replace(/[^0-9.-]/g,''))||0;
+      return vndSortDir==='asc' ? av-bv : bv-av;
+    }
+    return vndSortDir==='asc' ? av.localeCompare(bv) : bv.localeCompare(av);
+  });
+
+  var total = rows.length;
+  var start = (vndPage-1)*VND_PER_PAGE;
+  var page  = rows.slice(start, start+VND_PER_PAGE);
+
+  var meta = document.getElementById('vnd-meta');
+  if(meta) meta.textContent = total===0?'No results':(start+1)+'–'+Math.min(start+VND_PER_PAGE,total)+' of '+total;
+
+  var tbody = document.getElementById('vnd-tbody');
+  if(!tbody) return;
+  tbody.innerHTML = page.map(function(r, i){
+    var f = r.fields;
+    var price = f['Price'] ? parseFloat(String(f['Price']).replace(/[^0-9.-]/g,'')).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) : '—';
+    return '<tr data-vnd-id="'+r.id+'" style="cursor:pointer">'+
+      '<td class="c-vendor">'+e(f['Vendor']||'')+'</td>'+
+      '<td class="c-item">'+e(f['Item']||'')+'</td>'+
+      '<td class="c-desc" title="'+e(f['Description']||'')+'">'+e(f['Description']||'')+'</td>'+
+      '<td class="c-rate">'+e(f['Rate']||'—')+'</td>'+
+      '<td class="c-price">'+price+'</td>'+
+      '<td class="c-actions"><div class="row-actions">'+
+        '<button class="icon-btn edit" data-vnd-edit="'+r.id+'" title="Edit">'+IC_PENCIL+'</button>'+
+        '<button class="icon-btn del" data-vnd-del="'+r.id+'" data-vnd-vendor="'+e(f['Vendor']||'')+'" data-vnd-item="'+e(f['Item']||'')+'" title="Delete">'+IC_TRASH+'</button>'+
+      '</div></td>'+
+    '</tr>';
+  }).join('') || '<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--txt3);font-size:13px">No items found</td></tr>';
+
+  // Pagination
+  renderVendorPagination(total);
+
+  // Row interactions via delegation
+  tbody.addEventListener('dblclick', function(ev){
+    var row = ev.target.closest('tr[data-vnd-id]');
+    if(row) openVendorModal(row.dataset.vndId);
+  });
+  tbody.addEventListener('click', function(ev){
+    var eb = ev.target.closest('[data-vnd-edit]');
+    if(eb){ openVendorModal(eb.dataset.vndEdit); return; }
+    var db = ev.target.closest('[data-vnd-del]');
+    if(db){ deleteVendorItem(db.dataset.vndDel, db.dataset.vndVendor, db.dataset.vndItem); return; }
+  });
+
+  // Sort headers
+  document.querySelectorAll('th[data-vnd-sort]').forEach(function(th){
+    var newTh = th.cloneNode(true);
+    th.parentNode.replaceChild(newTh, th);
+    var field = newTh.dataset.vndSort;
+    newTh.classList.toggle('sort-asc',  field===vndSortField && vndSortDir==='asc');
+    newTh.classList.toggle('sort-desc', field===vndSortField && vndSortDir==='desc');
+    var icon = newTh.querySelector('.sort-icon');
+    if(icon) icon.textContent = field===vndSortField ? (vndSortDir==='asc'?'↑':'↓') : '↕';
+    newTh.addEventListener('click', function(){
+      if(vndSortField===field){ vndSortDir = vndSortDir==='asc'?'desc':'asc'; }
+      else { vndSortField=field; vndSortDir='asc'; }
+      renderVendorTable();
+    });
+  });
+
+  renderVendorKPIs();
+}
+
+function renderVendorPagination(total) {
+  var pages = Math.ceil(total/VND_PER_PAGE);
+  var info = document.getElementById('vnd-pag-info');
+  var btns = document.getElementById('vnd-pag-btns');
+  if(info) info.textContent = pages>1?'Page '+vndPage+' of '+pages:'';
+  if(!btns) return;
+  if(pages<=1){btns.innerHTML='';return;}
+  var h='<button class="pag-btn" onclick="vndGoPage('+(vndPage-1)+')" '+(vndPage===1?'disabled':'')+'>&#8249; prev</button>';
+  for(var p=1;p<=pages;p++){
+    if(p===1||p===pages||Math.abs(p-vndPage)<=1) h+='<button class="pag-btn '+(p===vndPage?'active':'')+'" onclick="vndGoPage('+p+')">'+p+'</button>';
+    else if(Math.abs(p-vndPage)===2) h+='<span class="pag-ellipsis">…</span>';
+  }
+  h+='<button class="pag-btn" onclick="vndGoPage('+(vndPage+1)+')" '+(vndPage===pages?'disabled':'')+'>next &#8250;</button>';
+  btns.innerHTML=h;
+}
+function vndGoPage(p){vndPage=p;renderVendorTable();}
+
+// ── Vendor Modal ──────────────────────────────────────────────────
+function showVendorModal() {
+  vndEditId = null;
+  document.getElementById('vendor-modal-title').textContent = 'Add Vendor Item';
+  ['vf-vendor','vf-item','vf-desc','vf-rate','vf-price'].forEach(function(id){
+    var el = document.getElementById(id); if(el) el.value='';
+  });
+  document.getElementById('vendor-modal').style.display = 'flex';
+  setTimeout(function(){ var el=document.getElementById('vf-vendor'); if(el) el.focus(); }, 50);
+}
+
+function openVendorModal(id) {
+  var rec = vndRecords.find(function(r){ return r.id===id; });
+  if(!rec) return;
+  vndEditId = id;
+  var f = rec.fields;
+  document.getElementById('vendor-modal-title').textContent = 'Edit Vendor Item';
+  document.getElementById('vf-vendor').value  = f['Vendor']||'';
+  document.getElementById('vf-item').value    = f['Item']||'';
+  document.getElementById('vf-desc').value    = f['Description']||'';
+  document.getElementById('vf-rate').value    = f['Rate']||'';
+  document.getElementById('vf-price').value   = f['Price']||'';
+  document.getElementById('vendor-modal').style.display = 'flex';
+}
+
+function closeVendorModal() {
+  document.getElementById('vendor-modal').style.display = 'none';
+  vndEditId = null;
+}
+
+async function saveVendorItem() {
+  var vendor = document.getElementById('vf-vendor').value.trim();
+  var item   = document.getElementById('vf-item').value.trim();
+  if(!vendor || !item) {
+    if(!vendor) document.getElementById('vf-vendor').focus();
+    else document.getElementById('vf-item').focus();
+    return;
+  }
+  var fields = {};
+  if(vendor) fields['Vendor']      = vendor;
+  if(item)   fields['Item']        = item;
+  var desc  = document.getElementById('vf-desc').value.trim();
+  var rate  = document.getElementById('vf-rate').value.trim();
+  var price = document.getElementById('vf-price').value.trim();
+  if(desc)  fields['Description']  = desc;
+  if(rate)  fields['Rate']         = rate;
+  if(price) fields['Price']        = price;
+
+  closeVendorModal();
+  setVndSave('saving');
+
+  try {
+    var url    = vndEditId ? WORKER_URL+'/vendor/'+vndEditId : WORKER_URL+'/vendor';
+    var method = vndEditId ? 'PATCH' : 'POST';
+    var res    = await fetch(url, { method:method, headers:HEADERS, body:JSON.stringify({fields:fields}) });
+    var data   = await res.json();
+    if(!res.ok) throw new Error((data.error&&data.error.message)||'HTTP '+res.status);
+
+    if(vndEditId) {
+      var idx = vndRecords.findIndex(function(r){return r.id===vndEditId;});
+      if(idx !== -1) vndRecords[idx] = data;
+    } else {
+      vndRecords.push(data);
+    }
+    setVndSave('saved');
+    renderVendorKPIs();
+    renderVendorTable();
+    toast((vndEditId?'Item updated':'Item added'),'ok');
+  } catch(err) {
+    setVndSave('err');
+    document.getElementById('vnd-err-banner').innerHTML = '<b>Save failed:</b> '+err.message;
+    document.getElementById('vnd-err-banner').style.display = 'block';
+    toast('Save failed: '+err.message,'err');
+  }
+}
+
+async function deleteVendorItem(id, vendor, item) {
+  if(!confirm('Delete "'+item+'" from '+vendor+'? This cannot be undone.')) return;
+  setVndSave('saving');
+  try {
+    var res = await fetch(WORKER_URL+'/vendor/'+id, { method:'DELETE', headers:HEADERS });
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    vndRecords = vndRecords.filter(function(r){return r.id!==id;});
+    setVndSave('saved');
+    renderVendorKPIs();
+    renderVendorTable();
+    toast('Item deleted','ok');
+  } catch(err) {
+    setVndSave('err');
+    toast('Delete failed: '+err.message,'err');
+  }
+}
+
+document.getElementById('vendor-modal').addEventListener('click', function(ev){ if(ev.target===this) closeVendorModal(); });
 
 // ── Export Report ─────────────────────────────────────────────────
 function exportReport(){
