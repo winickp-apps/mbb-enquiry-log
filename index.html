@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>mBELLAb Power Solutions — Customer Enquiry Log</title>
+<title>mBELLAb Power Solutions — Operations Portal</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -24,36 +24,7 @@ html,body{min-height:100%;background:var(--bg);color:var(--txt);font-family:'IBM
 ::-webkit-scrollbar-track{background:var(--bg2)}
 ::-webkit-scrollbar-thumb{background:var(--bg3);border-radius:3px}
 
-
-/* Edit modal */
-#edit-modal .modal-title{color:var(--txt)}
-
-
-
-/* Vendor screen */
-#vendor-screen{display:none}
-.vnd-kpi-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:20px}
-.vnd-badge{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:500;padding:2px 8px;border-radius:20px;white-space:nowrap;background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-bdr)}
-.c-vendor{width:130px;font-weight:500}
-.c-item{width:130px}
-.c-desc{max-width:0;white-space:normal !important;line-height:1.4;padding-top:6px !important;padding-bottom:6px !important}
-.c-rate{width:90px;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:11px}
-.c-price{width:100px;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:500;color:var(--green)}
-
-/* Home screen */
-#home-screen{display:none;min-height:calc(100vh - 58px);background:var(--bg2);padding:60px 40px}
-.home-wrap{max-width:800px;margin:0 auto}
-.home-title{font-size:22px;font-weight:600;color:var(--txt);margin-bottom:8px;letter-spacing:-.3px}
-.home-sub{font-size:13px;color:var(--txt3);margin-bottom:40px;font-family:'IBM Plex Mono',monospace}
-.home-cards{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-.home-card{background:var(--bg);border:1px solid var(--bdr2);border-radius:var(--rl);padding:32px 28px;cursor:pointer;transition:border-color .2s,box-shadow .2s,transform .15s}
-.home-card:hover{border-color:var(--amber-bdr);box-shadow:0 4px 20px rgba(227,98,9,.10);transform:translateY(-2px)}
-.home-card-icon{font-size:28px;margin-bottom:16px}
-.home-card-title{font-size:17px;font-weight:600;color:var(--txt);margin-bottom:8px;letter-spacing:-.2px}
-.home-card-desc{font-size:13px;color:var(--txt3);line-height:1.6}
-.home-card-arrow{margin-top:20px;font-size:13px;color:var(--amber);font-weight:600}
-
-/* Login */
+/* ── Login ── */
 #login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
 .lcard{background:var(--bg);border:1px solid var(--bdr2);border-radius:16px;padding:48px 52px;max-width:400px;width:100%;text-align:center;box-shadow:0 4px 24px rgba(0,0,0,.08)}
 .ldot{width:10px;height:10px;border-radius:50%;background:var(--amber);margin:0 auto 20px;animation:pulse 2.4s ease-in-out infinite}
@@ -69,7 +40,7 @@ html,body{min-height:100%;background:var(--bg);color:var(--txt);font-family:'IBM
 .lbtn:hover{opacity:.88}
 .lerr{font-size:12px;color:var(--red);margin-top:10px;min-height:18px}
 
-/* Loading */
+/* ── Loading ── */
 #loading{display:none;align-items:center;justify-content:center;min-height:100vh;flex-direction:column;gap:20px}
 .lc-card{background:var(--bg);border:1px solid var(--bdr2);border-radius:var(--rl);padding:28px 36px;text-align:center;min-width:280px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
 .lc-brand{font-size:14px;font-weight:600;color:var(--txt);margin-bottom:4px}
@@ -79,26 +50,40 @@ html,body{min-height:100%;background:var(--bg);color:var(--txt);font-family:'IBM
 .lc-bar{height:100%;background:var(--amber);border-radius:20px;width:0%;transition:width .4s ease}
 .lc-txt{font-size:12px;color:var(--txt3);font-family:'IBM Plex Mono',monospace}
 
-/* App */
-#app{display:none}
-.top-bar{background:var(--header);padding:0 32px;height:58px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;z-index:10;width:100%;left:0}
+/* ── Top bar ── */
+.top-bar{background:var(--header);padding:0 32px;height:58px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;z-index:10;width:100%}
 .brand-line{display:flex;align-items:center;gap:10px}
 .bdot{width:7px;height:7px;border-radius:50%;background:var(--amber);animation:pulse 2.4s ease-in-out infinite}
 .bname{font-size:15px;font-weight:600;letter-spacing:-.3px;color:#e6edf3}
 .bsub{font-size:11px;color:#484f58;font-family:'IBM Plex Mono',monospace;letter-spacing:.4px}
-.hdr-r{display:flex;align-items:center;gap:10px}
-.save-ind{display:flex;align-items:center;gap:5px;font-size:11px;color:#484f58;font-family:'IBM Plex Mono',monospace;white-space:nowrap;transition:color .25s}
+.hdr-r{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.save-ind{display:flex;align-items:center;gap:5px;font-size:11px;color:#484f58;font-family:'IBM Plex Mono',monospace;white-space:nowrap}
 .sdot{width:5px;height:5px;border-radius:50%;background:currentColor}
 .save-ind.saved{color:#3fb950}.save-ind.saving{color:var(--amber)}.save-ind.err{color:#f85149}
 .btn-pri{background:var(--amber);color:#fff;border:none;border-radius:var(--r);padding:7px 15px;font-size:13px;font-weight:600;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;white-space:nowrap}
 .btn-pri:hover{opacity:.88}
-.btn-ghost{background:transparent;border:1px solid rgba(255,255,255,.15);color:#8b949e;border-radius:var(--r);padding:6px 12px;font-size:12px;cursor:pointer;font-family:'IBM Plex Sans',sans-serif}
+.btn-ghost{background:transparent;border:1px solid rgba(255,255,255,.15);color:#8b949e;border-radius:var(--r);padding:6px 12px;font-size:12px;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;white-space:nowrap}
 .btn-ghost:hover{border-color:rgba(255,255,255,.3);color:#c9d1d9}
 
+/* ── Home screen ── */
+#home-screen{display:none}
+.home-inner{padding:60px 40px;max-width:1000px;margin:0 auto}
+.home-sub{font-size:12px;color:var(--txt3);font-family:'IBM Plex Mono',monospace;margin-bottom:36px;letter-spacing:.4px}
+.home-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.home-card{background:var(--bg);border:1px solid var(--bdr2);border-radius:var(--rl);padding:32px 28px;cursor:pointer;transition:border-color .2s,box-shadow .2s,transform .15s}
+.home-card:hover{border-color:var(--amber-bdr);box-shadow:0 4px 20px rgba(227,98,9,.10);transform:translateY(-2px)}
+.home-card-icon{font-size:28px;margin-bottom:16px}
+.home-card-title{font-size:17px;font-weight:600;color:var(--txt);margin-bottom:8px;letter-spacing:-.2px}
+.home-card-desc{font-size:13px;color:var(--txt3);line-height:1.6}
+.home-card-arrow{margin-top:20px;font-size:13px;color:var(--amber);font-weight:600}
+
+/* ── Body wrap ── */
+#app{display:none}
+#vendor-screen{display:none}
 .body-wrap{padding:24px 32px;max-width:1800px;margin:0 auto}
 .err-banner{background:var(--red-bg);border:1px solid var(--red-bdr);border-radius:var(--r);padding:12px 16px;font-size:13px;color:var(--red);margin-bottom:20px;display:none;line-height:1.6}
 
-/* KPIs */
+/* ── KPIs ── */
 .kpi-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px;margin-bottom:20px}
 .kpi{background:var(--bg);border:1px solid var(--bdr);border-radius:var(--rl);padding:14px 16px;cursor:pointer;transition:border-color .15s,background .15s,box-shadow .15s}
 .kpi:hover{border-color:var(--bdr2);box-shadow:0 1px 4px rgba(0,0,0,.06)}
@@ -119,7 +104,7 @@ html,body{min-height:100%;background:var(--bg);color:var(--txt);font-family:'IBM
 .kpi.active.closed .kpi-val{color:var(--purple)}
 .kpi.active.activefilter .kpi-val{color:var(--green)}
 
-/* Date range */
+/* ── Date range ── */
 .date-range-bar{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
 .date-range-bar label{font-size:11px;color:var(--txt3);font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.6px;white-space:nowrap}
 .date-input{background:var(--bg);border:1px solid var(--bdr2);border-radius:var(--r);padding:7px 10px;font-size:13px;color:var(--txt);font-family:'IBM Plex Sans',sans-serif;outline:none;width:148px}
@@ -128,7 +113,7 @@ html,body{min-height:100%;background:var(--bg);color:var(--txt);font-family:'IBM
 .btn-sm{background:transparent;border:1px solid var(--bdr2);color:var(--txt3);border-radius:var(--r);padding:7px 12px;font-size:12px;cursor:pointer;font-family:'IBM Plex Sans',sans-serif}
 .btn-sm:hover{color:var(--txt)}
 
-/* Filter bar */
+/* ── Filter bar ── */
 .filter-bar{display:flex;gap:10px;margin-bottom:12px;align-items:center;flex-wrap:wrap}
 .search-wrap{position:relative;flex:1;min-width:200px}
 .search-wrap svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);pointer-events:none}
@@ -136,11 +121,11 @@ html,body{min-height:100%;background:var(--bg);color:var(--txt);font-family:'IBM
 .search::placeholder{color:var(--txt3)}
 .search:focus{border-color:var(--amber);box-shadow:0 0 0 3px var(--amber-bg)}
 .result-meta{font-size:11px;color:var(--txt3);font-family:'IBM Plex Mono',monospace;white-space:nowrap}
-.show-toggles{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.show-toggles{display:flex;gap:16px;align-items:center}
 .toggle-lbl{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--txt2);cursor:pointer;user-select:none;white-space:nowrap}
 .toggle-lbl input[type=checkbox]{width:14px;height:14px;accent-color:var(--amber);cursor:pointer}
 
-/* Table */
+/* ── Table ── */
 .tbl-wrap{border:1px solid var(--bdr);border-radius:var(--rl);overflow:hidden;overflow-x:auto;box-shadow:0 1px 3px rgba(0,0,0,.04)}
 table{width:100%;border-collapse:collapse;font-size:12.5px;min-width:1200px}
 thead th{background:var(--bg2);color:var(--txt2);font-weight:600;font-size:11px;padding:10px 11px;text-align:left;border-bottom:1px solid var(--bdr);white-space:nowrap;position:relative;user-select:none}
@@ -154,22 +139,22 @@ thead th.sort-asc .sort-icon,thead th.sort-desc .sort-icon{opacity:1;color:var(-
 tbody tr{border-bottom:1px solid var(--bdr);transition:background .1s}
 tbody tr:last-child{border-bottom:none}
 tbody tr:hover{background:var(--bg2)}
-tbody tr.editing{background:#fff8f3 !important;box-shadow:inset 3px 0 0 var(--amber)}
+tbody tr.editing{background:#fff8f3!important;box-shadow:inset 3px 0 0 var(--amber)}
 td{padding:8px 11px;vertical-align:middle;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--txt)}
 .c-sr{width:68px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--txt3)!important}
 .c-date{width:90px;font-size:11px;color:var(--txt2)!important}
-.c-proj{min-width:360px;white-space:normal !important;line-height:1.4;padding-top:6px !important;padding-bottom:6px !important}
+.c-proj{min-width:360px;white-space:normal!important;line-height:1.4;padding-top:6px!important;padding-bottom:6px!important}
 .c-mc{width:120px;font-size:11.5px;color:var(--txt2)!important}
 .c-client{width:88px;font-size:11.5px;color:var(--txt2)!important}
 .c-rtu{width:58px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--txt2)!important}
 .c-status{width:108px}
 .c-chk{width:44px;text-align:center}
-.c-active{width:56px;text-align:center}
+.c-active{width:72px;text-align:center}
 .c-deadline{width:110px}
 .c-update{width:90px;font-size:12px;color:var(--txt2)}
 .c-actions{width:68px;text-align:right}
 
-/* Badges */
+/* ── Badges ── */
 .badge{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:500;padding:2px 8px;border-radius:20px;white-space:nowrap}
 .b-won{background:var(--green-bg);color:var(--green);border:1px solid var(--green-bdr)}
 .b-lost{background:var(--red-bg);color:var(--red);border:1px solid var(--red-bdr)}
@@ -177,17 +162,17 @@ td{padding:8px 11px;vertical-align:middle;overflow:hidden;text-overflow:ellipsis
 .b-process{background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-bdr)}
 .b-closed{background:var(--purple-bg);color:var(--purple);border:1px solid var(--purple-bdr)}
 
-/* Deadline */
+/* ── Deadline ── */
 .dl-overdue{background:var(--red-bg);color:var(--red);font-weight:600;border-radius:4px;padding:2px 6px;font-size:11px;white-space:nowrap;display:inline-block;border:1px solid var(--red-bdr)}
 .dl-soon{background:var(--amber-bg);color:var(--amber);font-weight:600;border-radius:4px;padding:2px 6px;font-size:11px;white-space:nowrap;display:inline-block;border:1px solid var(--amber-bdr)}
 .dl-normal{font-size:11px;color:var(--txt2)}
 
-/* Tick */
+/* ── Tick ── */
 .tick{background:none;border:none;cursor:pointer;padding:3px;border-radius:4px;font-size:14px;line-height:1;transition:background .1s,transform .12s;display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px}
 .tick:hover{background:var(--bg3);transform:scale(1.15)}
 .tick.on{color:var(--green)}.tick.off{color:var(--red)}.tick.na{color:var(--txt3);font-size:11px}
 
-/* Row actions */
+/* ── Row actions ── */
 .row-actions{display:flex;gap:3px;justify-content:flex-end;align-items:center}
 .icon-btn{background:none;border:none;cursor:pointer;padding:4px;border-radius:4px;display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;transition:background .1s,color .1s;opacity:0;color:var(--txt3)}
 tr:hover .icon-btn,tr.editing .icon-btn{opacity:1}
@@ -196,12 +181,12 @@ tr:hover .icon-btn,tr.editing .icon-btn{opacity:1}
 .icon-btn.save{color:var(--green);opacity:1!important}.icon-btn.save:hover{background:var(--green-bg)}
 .icon-btn.cancel-edit{color:var(--txt2);opacity:1!important}.icon-btn.cancel-edit:hover{background:var(--bg3)}
 
-/* Inline edit */
+/* ── Inline edit ── */
 .ei{width:100%;background:var(--bg);border:1px solid var(--amber);border-radius:4px;padding:3px 6px;font-size:12px;font-family:'IBM Plex Sans',sans-serif;color:var(--txt);outline:none}
 .ei:focus{box-shadow:0 0 0 2px var(--amber-bg)}
 .ei-sel{width:100%;background:var(--bg);border:1px solid var(--amber);border-radius:4px;padding:3px 5px;font-size:12px;font-family:'IBM Plex Sans',sans-serif;color:var(--txt);outline:none}
 
-/* Pagination */
+/* ── Pagination ── */
 .pag{display:flex;align-items:center;justify-content:space-between;margin-top:14px;gap:12px;flex-wrap:wrap}
 .pag-info{font-size:11px;color:var(--txt3);font-family:'IBM Plex Mono',monospace}
 .pag-btns{display:flex;gap:4px;align-items:center}
@@ -211,7 +196,7 @@ tr:hover .icon-btn,tr.editing .icon-btn{opacity:1}
 .pag-btn.active{background:var(--amber);border-color:var(--amber);color:#fff;font-weight:500}
 .pag-ellipsis{padding:0 4px;font-size:12px;color:var(--txt3)}
 
-/* Modals */
+/* ── Modals ── */
 .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;z-index:100;padding:20px}
 .modal{background:var(--bg);border:1px solid var(--bdr2);border-radius:var(--rl);padding:26px;width:100%;max-width:600px;max-height:90vh;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,.12)}
 .modal-title{font-size:15px;font-weight:600;margin-bottom:20px;display:flex;align-items:center;gap:8px}
@@ -235,53 +220,75 @@ tr:hover .icon-btn,tr.editing .icon-btn{opacity:1}
 .btn-danger{background:var(--red);color:#fff;border:none;border-radius:var(--r);padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;font-family:'IBM Plex Sans',sans-serif}
 .btn-danger:hover{opacity:.88}
 
-/* Toast */
+/* ── Toast ── */
 .toast{position:fixed;bottom:24px;right:24px;background:var(--txt);color:var(--bg);padding:10px 16px;border-radius:var(--r);font-size:13px;z-index:200;opacity:0;transform:translateY(8px);transition:opacity .2s,transform .2s;pointer-events:none;max-width:340px;box-shadow:0 4px 12px rgba(0,0,0,.15)}
 .toast.show{opacity:1;transform:translateY(0)}
 .toast.ok{background:var(--green)}.toast.err{background:var(--red)}
+
+/* ── Vendor screen ── */
+.vnd-kpi-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:20px}
+table.vnd-table{table-layout:fixed}
+table.vnd-table td{padding:5px 10px}
+.c-vendor{width:90px;font-weight:500}
+.c-ptype{width:90px;font-size:11.5px;color:var(--txt2)}
+.c-pmake{width:90px;font-size:11.5px;color:var(--txt2)}
+.c-item{width:110px}
+.c-desc{width:180px;max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.c-rate{width:90px;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:11px}
+.c-price{width:100px;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:500;color:var(--green)}
+
+/* ── Dashboard ── */
+#dashboard-screen{display:none}
+.dash-wrap{padding:28px 32px;max-width:1400px;margin:0 auto}
+.dash-section-title{font-size:11px;text-transform:uppercase;letter-spacing:.9px;color:var(--txt3);font-family:'IBM Plex Mono',monospace;margin-bottom:12px;margin-top:28px}
+.dash-section-title:first-child{margin-top:0}
+.dash-kpi-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;margin-bottom:4px}
+.dash-kpi{background:var(--bg);border:1px solid var(--bdr);border-radius:var(--rl);padding:18px 16px}
+.dash-kpi-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.9px;color:var(--txt3);margin-bottom:8px;font-family:'IBM Plex Mono',monospace}
+.dash-kpi-val{font-size:32px;font-weight:300;letter-spacing:-1.5px;color:var(--txt);line-height:1}
+.dash-kpi-sub{font-size:11px;color:var(--txt3);margin-top:5px;font-family:'IBM Plex Mono',monospace}
+.dash-kpi.green .dash-kpi-val{color:var(--green)}
+.dash-kpi.amber .dash-kpi-val{color:var(--amber)}
+.dash-kpi.red .dash-kpi-val{color:var(--red)}
+.dash-kpi.blue .dash-kpi-val{color:var(--blue)}
+.dash-kpi.purple .dash-kpi-val{color:var(--purple)}
+.dash-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:4px}
+.dash-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:4px}
+.dash-card{background:var(--bg);border:1px solid var(--bdr);border-radius:var(--rl);padding:20px}
+.dash-card-title{font-size:12px;font-weight:600;color:var(--txt);margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+.dash-card-title span{font-size:10px;color:var(--txt3);font-family:'IBM Plex Mono',monospace;font-weight:400}
+.bar-chart{display:flex;flex-direction:column;gap:10px}
+.bar-row{display:flex;align-items:center;gap:10px}
+.bar-label{font-size:11px;color:var(--txt2);width:90px;flex-shrink:0;text-align:right}
+.bar-track{flex:1;background:var(--bg3);border-radius:20px;height:8px;overflow:hidden}
+.bar-fill{height:100%;border-radius:20px;transition:width .6s ease}
+.bar-val{font-size:11px;color:var(--txt3);font-family:'IBM Plex Mono',monospace;width:30px;text-align:right;flex-shrink:0}
+.rate-ring{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+.rate-ring-val{font-size:36px;font-weight:300;color:var(--green);letter-spacing:-2px;line-height:1}
+.rate-ring-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.9px;color:var(--txt3);font-family:'IBM Plex Mono',monospace}
+.deadline-list{display:flex;flex-direction:column;gap:8px}
+.deadline-item{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border-radius:var(--r);background:var(--bg2)}
+.deadline-item.overdue{background:var(--red-bg);border:1px solid var(--red-bdr)}
+.deadline-item.soon{background:var(--amber-bg);border:1px solid var(--amber-bdr)}
+.deadline-proj{font-size:12px;color:var(--txt);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.deadline-date{font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--txt3);white-space:nowrap}
+.deadline-pill{font-size:10px;font-family:'IBM Plex Mono',monospace;padding:2px 7px;border-radius:20px;white-space:nowrap;font-weight:600}
+.deadline-pill.overdue{background:var(--red-bg);color:var(--red)}
+.deadline-pill.soon{background:var(--amber-bg);color:var(--amber)}
+.dash-table{width:100%;border-collapse:collapse;font-size:12px}
+.dash-table th{font-size:10px;text-transform:uppercase;letter-spacing:.7px;color:var(--txt3);font-family:'IBM Plex Mono',monospace;padding:0 0 8px;text-align:left;border-bottom:1px solid var(--bdr);font-weight:500}
+.dash-table td{padding:10px 0;border-bottom:1px solid var(--bdr);vertical-align:middle;color:var(--txt2)}
+.dash-table tr:last-child td{border-bottom:none}
 </style>
 </head>
 <body>
-
-<!-- HOME SCREEN (after login) -->
-<div id="home-screen" style="display:none">
-  <div class="top-bar">
-    <div class="brand-line">
-      <div class="bdot"></div>
-      <div>
-        <div class="bname">mBELLAb Power Solutions</div>
-        <div class="bsub">Operations Portal</div>
-      </div>
-    </div>
-    <div class="hdr-r">
-      <div class="save-ind" id="home-save-ind"><div class="sdot"></div><span id="home-save-txt">connected</span></div>
-    </div>
-  </div>
-  <div class="home-wrap" style="padding-top:60px;padding-bottom:40px;max-width:800px;margin:0 auto;padding-left:40px;padding-right:40px">
-    <div class="home-sub">mBELLAb Power Solutions &nbsp;&middot;&nbsp; Select a module to continue</div>
-    <div class="home-cards">
-      <div class="home-card" onclick="showOpportunities()">
-        <div class="home-card-icon">&#128203;</div>
-        <div class="home-card-title">mBELLAb Opportunities</div>
-        <div class="home-card-desc">Customer enquiry log, pipeline tracking, proposal status and LPO management.</div>
-        <div class="home-card-arrow">Open &rarr;</div>
-      </div>
-      <div class="home-card" onclick="showVendors()">
-        <div class="home-card-icon">&#128230;</div>
-        <div class="home-card-title">Vendor Equipment Pricing</div>
-        <div class="home-card-desc">Vendor catalogue, equipment sourcing, rates and pricing reference.</div>
-        <div class="home-card-arrow">Open &rarr;</div>
-      </div>
-    </div>
-  </div>
-</div>
 
 <!-- LOGIN -->
 <div id="login-screen" style="display:flex">
   <div class="lcard">
     <div class="ldot"></div>
     <div class="ltitle">mBELLAb Power Solutions</div>
-    <div class="lsub">Customer Enquiry Log &middot; mBb-FM-13</div>
+    <div class="lsub">Operations Portal</div>
     <div class="lfield">
       <label>Password</label>
       <input class="linput" id="login-pwd" type="password" placeholder="Enter password" autocomplete="current-password" onkeydown="if(event.key==='Enter')attemptLogin()">
@@ -295,36 +302,61 @@ tr:hover .icon-btn,tr.editing .icon-btn{opacity:1}
 <div id="loading" style="display:none">
   <div class="lc-card">
     <div class="lc-brand">mBELLAb Power Solutions</div>
-    <div class="lc-sub">Customer Enquiry Log &middot; mBb-FM-13</div>
+    <div class="lc-sub">Loading&hellip;</div>
     <div class="spin"></div>
     <div class="lc-bar-wrap"><div class="lc-bar" id="lc-bar"></div></div>
     <div class="lc-txt" id="lc-txt">Connecting&hellip;</div>
   </div>
 </div>
 
-<!-- APP -->
-<div id="app" style="display:none">
+<!-- HOME -->
+<div id="home-screen" style="display:none">
   <div class="top-bar">
-    <div class="brand-line">
-      <div class="bdot"></div>
-      <div>
-        <div class="bname">mBELLAb Power Solutions</div>
-        <div class="bsub">Customer Enquiry Log &nbsp;&middot;&nbsp; mBb-FM-13</div>
+    <div class="brand-line"><div class="bdot"></div><div><div class="bname">mBELLAb Power Solutions</div><div class="bsub">Operations Portal</div></div></div>
+    <div class="hdr-r"><div class="save-ind saved" id="home-save-ind"><div class="sdot"></div><span>connected</span></div></div>
+  </div>
+  <div class="home-inner">
+    <div class="home-sub">mBELLAb Power Solutions &nbsp;&middot;&nbsp; Select a module to continue</div>
+    <div class="home-cards">
+      <div class="home-card" onclick="showOpportunities()">
+        <div class="home-card-icon">&#128203;</div>
+        <div class="home-card-title">mBELLAb Opportunities</div>
+        <div class="home-card-desc">Customer enquiry log, pipeline tracking, proposal status and LPO management.</div>
+        <div class="home-card-arrow">Open &rarr;</div>
+      </div>
+      <div class="home-card" onclick="showDashboard()">
+        <div class="home-card-icon">&#9782;</div>
+        <div class="home-card-title">Management Dashboard</div>
+        <div class="home-card-desc">Live summary of pipeline, win rates, deadlines and activity across all opportunities.</div>
+        <div class="home-card-arrow">Open &rarr;</div>
+      </div>
+      <div class="home-card" onclick="showVendors()">
+        <div class="home-card-icon">&#128230;</div>
+        <div class="home-card-title">Vendor Equipment Pricing</div>
+        <div class="home-card-desc">Vendor catalogue, equipment sourcing, rates and pricing reference.</div>
+        <div class="home-card-arrow">Open &rarr;</div>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- APP: mBELLAb OPPORTUNITIES -->
+<div id="app" style="display:none">
+  <div class="top-bar">
+    <div class="brand-line"><div class="bdot"></div><div><div class="bname">mBELLAb Power Solutions</div><div class="bsub">Customer Enquiry Log &nbsp;&middot;&nbsp; mBb-FM-13</div></div></div>
     <div class="hdr-r">
       <div class="save-ind" id="save-ind"><div class="sdot"></div><span id="save-txt">connecting&hellip;</span></div>
-      <button class="btn-ghost" onclick="showFieldNames()">Debug fields</button>
+      <button class="btn-ghost" onclick="showHome()">&#8962; Home</button>
+      <button class="btn-ghost" onclick="showDashboard()">&#9782; Dashboard</button>
       <button class="btn-ghost" onclick="showVendors()">&#128230; Vendor Pricing</button>
+      <button class="btn-ghost" onclick="showFieldNames()">Debug fields</button>
       <button class="btn-ghost" onclick="exportReport()">&#8681; Export</button>
       <button class="btn-pri" onclick="showModal()">+ New Opportunity</button>
     </div>
   </div>
-
   <div class="body-wrap">
     <div class="err-banner" id="err-banner"></div>
     <div class="kpi-grid" id="kpis"></div>
-
     <div class="date-range-bar">
       <label>Enquiry Date</label>
       <input class="date-input" id="date-from" type="date">
@@ -332,13 +364,9 @@ tr:hover .icon-btn,tr.editing .icon-btn{opacity:1}
       <input class="date-input" id="date-to" type="date">
       <button class="btn-sm" onclick="clearDates()">Clear</button>
     </div>
-
     <div class="filter-bar">
       <div class="search-wrap">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-          <circle cx="6.5" cy="6.5" r="5" stroke="#8C959F" stroke-width="1.5"/>
-          <path d="M10.5 10.5L14 14" stroke="#8C959F" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="6.5" cy="6.5" r="5" stroke="#8C959F" stroke-width="1.5"/><path d="M10.5 10.5L14 14" stroke="#8C959F" stroke-width="1.5" stroke-linecap="round"/></svg>
         <input class="search" id="search" type="text" placeholder="Search project, client, contractor, SR number&hellip;" oninput="currentPage=1;applyFilters()">
       </div>
       <div class="result-meta" id="meta"></div>
@@ -347,36 +375,101 @@ tr:hover .icon-btn,tr.editing .icon-btn{opacity:1}
         <label class="toggle-lbl"><input type="checkbox" id="show-cancelled" onchange="currentPage=1;applyFilters()"> Show Cancelled</label>
       </div>
     </div>
-
     <div class="tbl-wrap">
       <table>
-        <thead>
-          <tr>
-            <th class="c-sr sortable" data-col="c-sr" data-sort="sr_no">SR No.<span class="sort-icon">&#8597;</span><div class="col-resizer"></div></th>
-            <th class="c-date sortable" data-col="c-date" data-sort="date">Enquiry Date<span class="sort-icon">&#8597;</span><div class="col-resizer"></div></th>
-            <th class="c-proj sortable" data-col="c-proj" data-sort="project">Project Name<span class="sort-icon">&#8597;</span><div class="col-resizer"></div></th>
-            <th class="c-mc sortable" data-col="c-mc" data-sort="main_cont">Main Contractor<span class="sort-icon">&#8597;</span><div class="col-resizer"></div></th>
-            <th class="c-client sortable" data-col="c-client" data-sort="client">Client<span class="sort-icon">&#8597;</span><div class="col-resizer"></div></th>
-            <th class="c-rtu ctr sortable" data-col="c-rtu" data-sort="rtu" title="RTU / Substations">RTU<span class="sort-icon">&#8597;</span><div class="col-resizer"></div></th>
-            <th class="c-status sortable" data-col="c-status" data-sort="status">Status<span class="sort-icon">&#8597;</span><div class="col-resizer"></div></th>
-            <th class="c-chk ctr" data-col="c-chk-qtn" title="Quotation">QTN<div class="col-resizer"></div></th>
-            <th class="c-chk ctr" data-col="c-chk-tp" title="Technical Proposal">TP<div class="col-resizer"></div></th>
-            <th class="c-chk ctr" data-col="c-chk-lpoc" title="LPO from Client">LPO-C<div class="col-resizer"></div></th>
-            <th class="c-chk ctr" data-col="c-chk-lpos" title="LPO MBB to Supplier">LPO-S<div class="col-resizer"></div></th>
-            <th class="c-active ctr" data-col="c-active">Active (working on)<div class="col-resizer"></div></th>
-            <th class="c-deadline sortable" data-col="c-deadline" data-sort="deadline">Deadline<span class="sort-icon">&#8597;</span><div class="col-resizer"></div></th>
-            <th class="c-update sortable" data-col="c-update" data-sort="last_update">Last Update<span class="sort-icon">&#8597;</span><div class="col-resizer"></div></th>
-            <th class="c-actions"><div class="col-resizer"></div></th>
-          </tr>
-        </thead>
+        <thead><tr>
+          <th class="c-sr sortable" data-col="c-sr" data-sort="sr_no">SR No.<span class="sort-icon">&#8597;</span><div class="col-resizer"></div></th>
+          <th class="c-date sortable" data-col="c-date" data-sort="date">Enquiry Date<span class="sort-icon">&#8597;</span><div class="col-resizer"></div></th>
+          <th class="c-proj sortable" data-col="c-proj" data-sort="project">Project Name<span class="sort-icon">&#8597;</span><div class="col-resizer"></div></th>
+          <th class="c-mc sortable" data-col="c-mc" data-sort="main_cont">Main Contractor<span class="sort-icon">&#8597;</span><div class="col-resizer"></div></th>
+          <th class="c-client sortable" data-col="c-client" data-sort="client">Client<span class="sort-icon">&#8597;</span><div class="col-resizer"></div></th>
+          <th class="c-rtu ctr sortable" data-col="c-rtu" data-sort="rtu" title="RTU / Substations">RTU<span class="sort-icon">&#8597;</span><div class="col-resizer"></div></th>
+          <th class="c-status sortable" data-col="c-status" data-sort="status">Status<span class="sort-icon">&#8597;</span><div class="col-resizer"></div></th>
+          <th class="c-chk ctr" data-col="c-chk-qtn" title="Quotation">QTN<div class="col-resizer"></div></th>
+          <th class="c-chk ctr" data-col="c-chk-tp" title="Technical Proposal">TP<div class="col-resizer"></div></th>
+          <th class="c-chk ctr" data-col="c-chk-lpoc" title="LPO from Client">LPO-C<div class="col-resizer"></div></th>
+          <th class="c-chk ctr" data-col="c-chk-lpos" title="LPO MBB to Supplier">LPO-S<div class="col-resizer"></div></th>
+          <th class="c-active ctr" data-col="c-active">Active (working on)<div class="col-resizer"></div></th>
+          <th class="c-deadline sortable" data-col="c-deadline" data-sort="deadline">Deadline<span class="sort-icon">&#8597;</span><div class="col-resizer"></div></th>
+          <th class="c-update sortable" data-col="c-update" data-sort="last_update">Last Update<span class="sort-icon">&#8597;</span><div class="col-resizer"></div></th>
+          <th class="c-actions"><div class="col-resizer"></div></th>
+        </tr></thead>
         <tbody id="tbody"></tbody>
       </table>
     </div>
+    <div class="pag"><div class="pag-info" id="pag-info"></div><div class="pag-btns" id="pag-btns"></div></div>
+  </div>
+</div>
 
-    <div class="pag">
-      <div class="pag-info" id="pag-info"></div>
-      <div class="pag-btns" id="pag-btns"></div>
+<!-- DASHBOARD -->
+<div id="dashboard-screen" style="display:none">
+  <div class="top-bar">
+    <div class="brand-line"><div class="bdot"></div><div><div class="bname">mBELLAb Power Solutions</div><div class="bsub">Management Dashboard</div></div></div>
+    <div class="hdr-r">
+      <div class="save-ind saved"><div class="sdot"></div><span>live</span></div>
+      <button class="btn-ghost" onclick="showOpportunities()">&#128203; Opportunities</button>
+      <button class="btn-ghost" onclick="showVendors()">&#128230; Vendor Pricing</button>
+      <button class="btn-ghost" onclick="showHome()">&#8962; Home</button>
     </div>
+  </div>
+  <div class="dash-wrap">
+    <div class="dash-section-title">Pipeline Overview</div>
+    <div class="dash-kpi-grid" id="dash-kpis"></div>
+    <div class="dash-grid-3" style="margin-top:20px">
+      <div class="dash-card"><div class="dash-card-title">Status Breakdown <span>by count</span></div><div class="bar-chart" id="dash-bar-chart"></div></div>
+      <div class="dash-card"><div class="dash-card-title">Win Rate <span>closed opportunities</span></div><div id="dash-win-rate" style="display:flex;align-items:center;justify-content:center;height:160px"></div></div>
+      <div class="dash-card"><div class="dash-card-title">RTU / Substations <span>by status</span></div><div class="bar-chart" id="dash-rtu-chart"></div></div>
+    </div>
+    <div class="dash-grid-2" style="margin-top:16px">
+      <div class="dash-card"><div class="dash-card-title">Upcoming &amp; Overdue Deadlines <span id="dash-deadline-count"></span></div><div class="deadline-list" id="dash-deadlines"></div></div>
+      <div class="dash-card"><div class="dash-card-title">Top Clients <span>by opportunity count</span></div><div class="bar-chart" id="dash-client-chart"></div></div>
+    </div>
+    <div style="margin-top:16px">
+      <div class="dash-card">
+        <div class="dash-card-title">Recent Activity <span>last 10 updated</span></div>
+        <table class="dash-table"><thead><tr><th>SR No.</th><th>Project</th><th>Client</th><th>Status</th><th>Last Update</th><th>Deadline</th></tr></thead><tbody id="dash-recent"></tbody></table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VENDOR EQUIPMENT PRICING -->
+<div id="vendor-screen" style="display:none">
+  <div class="top-bar">
+    <div class="brand-line"><div class="bdot"></div><div><div class="bname">mBELLAb Power Solutions</div><div class="bsub">Vendor Equipment Pricing</div></div></div>
+    <div class="hdr-r">
+      <div class="save-ind" id="vnd-save-ind"><div class="sdot"></div><span id="vnd-save-txt">connected</span></div>
+      <button class="btn-ghost" onclick="showOpportunities()">&#128203; mBELLAb Opportunities</button>
+      <button class="btn-ghost" onclick="showDashboard()">&#9782; Dashboard</button>
+      <button class="btn-ghost" onclick="showHome()">&#8962; Home</button>
+      <button class="btn-pri" onclick="showVendorModal()">+ Add Item</button>
+    </div>
+  </div>
+  <div class="body-wrap">
+    <div class="err-banner" id="vnd-err-banner"></div>
+    <div class="kpi-grid vnd-kpi-grid" id="vnd-kpis"></div>
+    <div class="filter-bar">
+      <div class="search-wrap">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="6.5" cy="6.5" r="5" stroke="#8C959F" stroke-width="1.5"/><path d="M10.5 10.5L14 14" stroke="#8C959F" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <input class="search" id="vnd-search" type="text" placeholder="Search vendor, item, description&hellip;" oninput="renderVendorTable()">
+      </div>
+      <div class="result-meta" id="vnd-meta"></div>
+    </div>
+    <div class="tbl-wrap">
+      <table class="vnd-table">
+        <thead><tr>
+          <th class="c-vendor sortable" data-vnd-sort="Vendor" data-col="c-vendor">Vendor<span class="sort-icon">&#8597;</span><div class="col-resizer"></div></th>
+          <th class="c-pmake sortable" data-vnd-sort="Product Make" data-col="c-pmake">Product Make<span class="sort-icon">&#8597;</span><div class="col-resizer"></div></th>
+          <th class="c-ptype sortable" data-vnd-sort="Product Type" data-col="c-ptype">Product Type<span class="sort-icon">&#8597;</span><div class="col-resizer"></div></th>
+          <th class="c-item sortable" data-vnd-sort="Item" data-col="c-item">Item<span class="sort-icon">&#8597;</span><div class="col-resizer"></div></th>
+          <th class="c-desc" data-col="c-desc">Description<div class="col-resizer"></div></th>
+          <th class="c-price" style="text-align:right" data-vnd-sort="Unit Price" data-col="c-price">Unit Price<span class="sort-icon">&#8597;</span><div class="col-resizer"></div></th>
+          <th class="c-actions"></th>
+        </tr></thead>
+        <tbody id="vnd-tbody"></tbody>
+      </table>
+    </div>
+    <div class="pag"><div class="pag-info" id="vnd-pag-info"></div><div class="pag-btns" id="vnd-pag-btns"></div></div>
   </div>
 </div>
 
@@ -412,7 +505,6 @@ tr:hover .icon-btn,tr.editing .icon-btn{opacity:1}
   </div>
 </div>
 
-
 <!-- EDIT OPPORTUNITY MODAL -->
 <div class="modal-bg" id="edit-modal" style="display:none">
   <div class="modal">
@@ -437,64 +529,11 @@ tr:hover .icon-btn,tr.editing .icon-btn{opacity:1}
       <div class="field"><label>Proposal Submitted On</label><input id="ef-prop" placeholder="DD.MM.YYYY"></div>
       <div class="field"><label>Upcoming Deadline</label><input id="ef-deadline" type="date"></div>
       <div class="field full"><label>Last Update</label><input id="ef-update" placeholder="e.g. Proposal submitted, awaiting LPO&hellip;"></div>
+      <div class="field full"><label>SharePoint Docs Link</label><input id="ef-docs" type="url" placeholder="https://mbellab.sharepoint.com/&hellip;"></div>
     </div>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeEditModal()">Cancel</button>
       <button class="btn-pri" onclick="saveEditModal()">Save Changes</button>
-    </div>
-  </div>
-</div>
-
-<!-- VENDOR EQUIPMENT PRICING SCREEN -->
-<div id="vendor-screen" style="display:none">
-  <div class="top-bar">
-    <div class="brand-line">
-      <div class="bdot"></div>
-      <div>
-        <div class="bname">mBELLAb Power Solutions</div>
-        <div class="bsub">Vendor Equipment Pricing</div>
-      </div>
-    </div>
-    <div class="hdr-r">
-      <div class="save-ind" id="vnd-save-ind"><div class="sdot"></div><span id="vnd-save-txt">connected</span></div>
-      <button class="btn-ghost" onclick="showOpportunities()">&#128203; mBELLAb Opportunities</button>
-      <button class="btn-ghost" onclick="showHome()">&larr; Home</button>
-      <button class="btn-pri" onclick="showVendorModal()">+ Add Item</button>
-    </div>
-  </div>
-  <div class="body-wrap">
-    <div class="err-banner" id="vnd-err-banner"></div>
-    <div class="kpi-grid vnd-kpi-grid" id="vnd-kpis"></div>
-
-    <div class="filter-bar">
-      <div class="search-wrap">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-          <circle cx="6.5" cy="6.5" r="5" stroke="#8C959F" stroke-width="1.5"/>
-          <path d="M10.5 10.5L14 14" stroke="#8C959F" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
-        <input class="search" id="vnd-search" type="text" placeholder="Search vendor, item, description&hellip;" oninput="renderVendorTable()">
-      </div>
-      <div class="result-meta" id="vnd-meta"></div>
-    </div>
-
-    <div class="tbl-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th class="c-vendor sortable" data-vnd-sort="Vendor">Vendor<span class="sort-icon">&#8597;</span></th>
-            <th class="c-item sortable" data-vnd-sort="Item">Item<span class="sort-icon">&#8597;</span></th>
-            <th class="c-desc">Description</th>
-            <th class="c-rate" style="text-align:right" data-vnd-sort="Rate">Rate<span class="sort-icon">&#8597;</span></th>
-            <th class="c-price" style="text-align:right" data-vnd-sort="Price">Price<span class="sort-icon">&#8597;</span></th>
-            <th class="c-actions"></th>
-          </tr>
-        </thead>
-        <tbody id="vnd-tbody"></tbody>
-      </table>
-    </div>
-    <div class="pag">
-      <div class="pag-info" id="vnd-pag-info"></div>
-      <div class="pag-btns" id="vnd-pag-btns"></div>
     </div>
   </div>
 </div>
@@ -506,9 +545,10 @@ tr:hover .icon-btn,tr.editing .icon-btn{opacity:1}
     <div class="form-grid">
       <div class="field"><label>Vendor *</label><input id="vf-vendor" placeholder="e.g. Lucy Electric"></div>
       <div class="field"><label>Item *</label><input id="vf-item" placeholder="e.g. RTU 560"></div>
+      <div class="field"><label>Product Type</label><input id="vf-ptype" placeholder="e.g. RTU, Switch, Cable"></div>
+      <div class="field"><label>Product Make</label><input id="vf-pmake" placeholder="e.g. Siemens, Lucy Electric"></div>
       <div class="field full"><label>Description</label><input id="vf-desc" placeholder="Brief description of equipment"></div>
-      <div class="field"><label>Rate</label><input id="vf-rate" placeholder="e.g. Per unit"></div>
-      <div class="field"><label>Price</label><input id="vf-price" placeholder="e.g. 4500.00"></div>
+      <div class="field"><label>Unit Price</label><input id="vf-price" placeholder="e.g. 4500.00"></div>
     </div>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeVendorModal()">Cancel</button>
@@ -532,6 +572,8 @@ tr:hover .icon-btn,tr.editing .icon-btn{opacity:1}
 <div class="toast" id="toast"></div>
 
 <script>
+
+
 // ================================================================
 // CONFIG
 // ================================================================
@@ -552,11 +594,13 @@ var F = {
   LPO_SUPPLIER: 'LPO (MBB to Supplier)',
   LAST_UPDATE:  'Last_Update',
   DEADLINE:     'Deadline',
-  ACTIVE:       'Active'
+  ACTIVE:       'Active',
+  DOCS:         'Docs'
 };
 // ================================================================
 
 var HEADERS = {'Content-Type':'application/json'};
+function getHeaders(){ return {'Content-Type':'application/json','X-App-Password':appPassword}; }
 var allRecords = [], items = [], filtered = [];
 var currentStatus = 'ALL';
 var currentPage = 1;
@@ -575,6 +619,7 @@ var IC_PENCIL = '<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><pa
 var IC_SAVE   = '<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z" fill="currentColor"/></svg>';
 var IC_CANCEL = '<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M3.72 3.72a.75.75 0 011.06 0L8 6.94l3.22-3.22a.75.75 0 111.06 1.06L9.06 8l3.22 3.22a.75.75 0 11-1.06 1.06L8 9.06l-3.22 3.22a.75.75 0 01-1.06-1.06L6.94 8 3.72 4.78a.75.75 0 010-1.06z" fill="currentColor"/></svg>';
 var IC_TRASH  = '<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M6.5 1h3a.5.5 0 010 1h-3a.5.5 0 010-1zM2 4.5A.5.5 0 012.5 4h11a.5.5 0 010 1H13l-.8 8.02A2 2 0 0110.21 15H5.79a2 2 0 01-1.99-1.98L3 5H2.5A.5.5 0 012 4.5z" fill="currentColor"/></svg>';
+var IC_DOCS   = '<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M2 2.5A2.5 2.5 0 014.5 0h7A2.5 2.5 0 0114 2.5v11a2.5 2.5 0 01-2.5 2.5h-7A2.5 2.5 0 012 13.5V2.5zm2.5-1A1.5 1.5 0 003 2.5v11A1.5 1.5 0 004.5 15h7a1.5 1.5 0 001.5-1.5v-11A1.5 1.5 0 0011.5 1.5h-7zM4.75 8a.75.75 0 01.75-.75h5a.75.75 0 010 1.5h-5A.75.75 0 014.75 8zm0 2.5a.75.75 0 01.75-.75h5a.75.75 0 010 1.5h-5a.75.75 0 01-.75-.75zM5.5 4a.75.75 0 000 1.5h2a.75.75 0 000-1.5h-2z" fill="currentColor"/></svg>';
 
 // ── Helpers ──────────────────────────────────────────────────────
 function s(v) { return (v === null || v === undefined) ? '' : String(v).trim(); }
@@ -677,6 +722,7 @@ if(appPassword){
   var lastScreen = sessionStorage.getItem('mbb_screen') || 'home';
   if(lastScreen === 'opportunities') showOpportunities();
   else if(lastScreen === 'vendors') showVendors();
+  else if(lastScreen === 'dashboard') { showDashboard(); }
   else showHome();
 } else {
   document.getElementById('login-screen').style.display='flex';
@@ -700,7 +746,7 @@ async function loadAll() {
       var ctrl=new AbortController();
       var timer=setTimeout(function(){ctrl.abort();},15000);
       var res;
-      try{res=await fetch(url,{headers:HEADERS,signal:ctrl.signal});}finally{clearTimeout(timer);}
+      try{res=await fetch(url,{headers:getHeaders(),signal:ctrl.signal});}finally{clearTimeout(timer);}
       if(!res.ok){var er=await res.json().catch(function(){return{};});throw new Error((er.error&&er.error.message)||'HTTP '+res.status);}
       var data=await res.json();
       records=records.concat(data.records||[]);
@@ -734,7 +780,8 @@ function parseItems() {
       rtu:s(f[F.RTU])||'--', status:normStatus(s(f[F.STATUS])), proposal:s(f[F.PROPOSAL]),
       quotation:s(f[F.QUOTATION]), tech_prop:s(f[F.TECH_PROP]),
       lpo_client:s(f[F.LPO_CLIENT]), lpo_supplier:s(f[F.LPO_SUPPLIER]),
-      last_update:s(f[F.LAST_UPDATE]), deadline:s(f[F.DEADLINE]), active:s(f[F.ACTIVE])
+      last_update:s(f[F.LAST_UPDATE]), deadline:s(f[F.DEADLINE]), active:s(f[F.ACTIVE]),
+      docs:s(f[F.DOCS])
     };
   });
   sortItems();
@@ -755,7 +802,7 @@ async function patchRecord(id,fields) {
   var clean={};
   Object.keys(fields).forEach(function(k){if(fields[k]!==''&&fields[k]!==null&&fields[k]!==undefined)clean[k]=fields[k];});
   try {
-    var res=await fetch(WORKER_URL+'/'+id,{method:'PATCH',headers:HEADERS,body:JSON.stringify({fields:clean})});
+    var res=await fetch(WORKER_URL+'/'+id,{method:'PATCH',headers:getHeaders(),body:JSON.stringify({fields:clean})});
     var d=await res.json().catch(function(){return{};});
     if(!res.ok){var msg=(d.error&&d.error.message)||'HTTP '+res.status;showError('<b>Save failed:</b> '+msg);throw new Error(msg);}
     setSave('saved'); hideError();
@@ -765,7 +812,7 @@ async function postRecord(fields) {
   setSave('saving');
   try {
     var clean={};Object.keys(fields).forEach(function(k){if(fields[k]!==''&&fields[k]!==null&&fields[k]!==undefined)clean[k]=fields[k];});
-    var res=await fetch(WORKER_URL,{method:'POST',headers:HEADERS,body:JSON.stringify({fields:clean})});
+    var res=await fetch(WORKER_URL,{method:'POST',headers:getHeaders(),body:JSON.stringify({fields:clean})});
     var data=await res.json();
     if(!res.ok) throw new Error((data.error&&data.error.message)||'HTTP '+res.status);
     allRecords.push(data); parseItems(); setSave('saved');
@@ -777,7 +824,7 @@ async function postRecord(fields) {
 async function deleteRecord(id) {
   setSave('saving');
   try {
-    var res=await fetch(WORKER_URL+'/'+id,{method:'DELETE',headers:HEADERS});
+    var res=await fetch(WORKER_URL+'/'+id,{method:'DELETE',headers:getHeaders()});
     if(!res.ok) throw new Error('HTTP '+res.status);
     allRecords=allRecords.filter(function(r){return r.id!==id;});
     parseItems(); setSave('saved');
@@ -911,6 +958,7 @@ function mkDisplayRow(r){
     '<td class="c-deadline">'+renderDeadline(r.deadline)+'</td>'+
     '<td class="c-update" title="'+e(r.last_update)+'">'+e(r.last_update)+'</td>'+
     '<td class="c-actions"><div class="row-actions">'+
+      (r.docs ? '<a class="icon-btn docs-link has-link" href="'+r.docs+'" target="_blank" rel="noopener" title="Open SharePoint docs">'+IC_DOCS+'</a>' : '<span class="icon-btn docs-link" title="No docs link saved">'+IC_DOCS+'</span>')+
       '<button class="icon-btn edit" onclick="startEdit(\''+r._id+'\')" title="Edit">'+IC_PENCIL+'</button>'+
       '<button class="icon-btn del" onclick="promptDelete(\''+r._id+'\',\''+e(r.sr_no)+'\',\''+e(r.project)+'\')" title="Delete">'+IC_TRASH+'</button>'+
     '</div></td>'+
@@ -920,7 +968,7 @@ function mkDisplayRow(r){
 function mkEditRow(r){
   var opts=STATUS_OPTS.map(function(st){return '<option value="'+st+'"'+(r.status===st?' selected':'')+'>'+( st==='PIPELINE'?'Pipeline':st)+'</option>';}).join('');
   return '<tr class="editing" data-id="'+r._id+'">'+
-    '<td class="c-sr" style="font-family:\'IBM Plex Mono\',monospace;font-size:11px;color:var(--txt3)">'+e(r.sr_no)+'</td>'+
+    '<td class="c-sr" style="font-family:monospace;font-size:11px;color:var(--txt3)">'+e(r.sr_no)+'</td>'+
     '<td class="c-date" style="overflow:visible"><input class="ei" id="ei-date" value="'+e(r.date)+'" placeholder="DD.MM.YYYY" style="width:88px"></td>'+
     '<td class="c-proj" style="overflow:visible"><input class="ei" id="ei-proj" value="'+e(r.project)+'" style="width:100%"></td>'+
     '<td class="c-mc" style="overflow:visible"><input class="ei" id="ei-mc" value="'+e(r.main_cont)+'" style="width:112px"></td>'+
@@ -988,7 +1036,7 @@ function initSortHeaders(){
     var icon=newTh.querySelector('.sort-icon');
     if(icon) icon.textContent=newTh.dataset.sort===sortField?(sortDir==='asc'?'\u2191':'\u2193'):'\u2195';
     newTh.addEventListener('click',function(ev){
-      if(ev.target.classList.contains('col-resizer')) return;
+      if(_resizing) return;
       var field=newTh.dataset.sort;
       if(sortField===field){sortDir=sortDir==='asc'?'desc':'asc';}
       else{sortField=field;sortDir=(field==='sr_no'||field==='date'||field==='deadline')?'desc':'asc';}
@@ -998,30 +1046,54 @@ function initSortHeaders(){
 }
 
 // ── Column resize ─────────────────────────────────────────────────
+var _resizing = false;
+
 function initColumnResize(){
   document.querySelectorAll('thead th').forEach(function(th){
     var resizer=th.querySelector('.col-resizer');
     if(!resizer) return;
+
     resizer.addEventListener('mousedown',function(ev){
-      var startX=ev.clientX,startW=th.offsetWidth;
+      var startX=ev.clientX, startW=th.offsetWidth, moved=false;
       resizer.classList.add('active');
-      document.body.style.cursor='col-resize'; document.body.style.userSelect='none';
+      document.body.style.cursor='col-resize';
+      document.body.style.userSelect='none';
+
       function onMove(e){
-        var w=Math.max(40,startW+(e.clientX-startX));
-        th.style.width=w+'px'; th.style.minWidth=w+'px';
-        var col=th.dataset.col;
-        if(col) document.querySelectorAll('td.'+col).forEach(function(td){td.style.width=w+'px';td.style.maxWidth=w+'px';});
+        if(!moved && Math.abs(e.clientX - startX) < 3) return; // ignore tiny jitter
+        moved = true;
+        _resizing = true;
+        var w = Math.max(40, startW + (e.clientX - startX));
+        th.style.width = w+'px';
+        th.style.minWidth = w+'px';
+        var col = th.dataset.col;
+        if(col) document.querySelectorAll('td.'+col).forEach(function(td){
+          td.style.width=w+'px'; td.style.maxWidth=w+'px';
+        });
       }
+
       function onUp(){
         resizer.classList.remove('active');
-        document.body.style.cursor=''; document.body.style.userSelect='';
-        document.removeEventListener('mousemove',onMove);
-        document.removeEventListener('mouseup',onUp);
+        document.body.style.cursor='';
+        document.body.style.userSelect='';
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+        // Suppress the click that fires after mouseup
+        if(_resizing){
+          setTimeout(function(){ _resizing = false; }, 10);
+        }
       }
-      document.addEventListener('mousemove',onMove);
-      document.addEventListener('mouseup',onUp);
-      ev.preventDefault(); ev.stopPropagation();
+
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onUp);
+      ev.preventDefault();
+      ev.stopPropagation();
     });
+
+    // Block click on the th if a resize just happened
+    th.addEventListener('click', function(ev){
+      if(_resizing){ ev.stopImmediatePropagation(); }
+    }, true); // capture phase — fires before sort listener
   });
 }
 
@@ -1075,7 +1147,7 @@ function saveEntry(){
 // ── Debug ─────────────────────────────────────────────────────────
 async function showFieldNames(){
   try{
-    var res=await fetch(WORKER_URL+'?maxRecords=1',{headers:HEADERS});
+    var res=await fetch(WORKER_URL+'?maxRecords=1',{headers:getHeaders()});
     var data=await res.json();
     var flds=Object.keys((data.records&&data.records[0]&&data.records[0].fields)||{});
     showError('<b>Airtable column names:</b><br><br>'+flds.map(function(f){return '&nbsp;&nbsp;<code style="background:#eee;padding:1px 5px;border-radius:3px;font-size:12px">'+f+'</code>';}).join('<br>'));
@@ -1100,6 +1172,7 @@ function openEditModal(id) {
   document.getElementById('ef-prop').value     = item.proposal;
   document.getElementById('ef-deadline').value = item.deadline || '';
   document.getElementById('ef-update').value   = item.last_update;
+  document.getElementById('ef-docs').value     = item.docs || '';
   document.getElementById('edit-modal').style.display = 'flex';
   setTimeout(function(){ document.getElementById('ef-proj').focus(); }, 50);
 }
@@ -1122,6 +1195,7 @@ async function saveEditModal() {
   fields[F.STATUS]      = g('ef-status');
   fields[F.PROPOSAL]    = g('ef-prop');
   fields[F.LAST_UPDATE] = g('ef-update');
+  var docsVal = g('ef-docs'); if(docsVal) fields[F.DOCS] = docsVal;
   var dlVal = document.getElementById('ef-deadline').value;
   if(dlVal) fields[F.DEADLINE] = dlVal;
   // Update local item
@@ -1132,6 +1206,7 @@ async function saveEditModal() {
     item.client=fields[F.CLIENT]; item.rtu=fields[F.RTU]||'--';
     item.status=normStatus(fields[F.STATUS]); item.proposal=fields[F.PROPOSAL];
     item.last_update=fields[F.LAST_UPDATE];
+    if(docsVal) item.docs=docsVal;
     if(dlVal) item.deadline=dlVal;
     var rec=allRecords.find(function(r){return r.id===id;});
     if(rec){
@@ -1159,9 +1234,10 @@ var vndEditId = null;
 
 function showHome() {
   sessionStorage.setItem('mbb_screen','home');
+  ['app','vendor-screen','dashboard-screen','loading'].forEach(function(id){
+    document.getElementById(id).style.display='none';
+  });
   document.getElementById('home-screen').style.display = 'block';
-  document.getElementById('app').style.display = 'none';
-  document.getElementById('vendor-screen').style.display = 'none';
 }
 function showOpportunities() {
   sessionStorage.setItem('mbb_screen','opportunities');
@@ -1202,7 +1278,7 @@ async function loadVendors() {
     var records = [], offset = null;
     do {
       var url = WORKER_URL+'/vendor?pageSize=100'+(offset?'&offset='+encodeURIComponent(offset):'');
-      var res = await fetch(url, { headers: HEADERS });
+      var res = await fetch(url, { headers: getHeaders() });
       if(!res.ok){ var er=await res.json().catch(function(){return{};}); throw new Error((er.error&&er.error.message)||'HTTP '+res.status); }
       var data = await res.json();
       records = records.concat(data.records||[]);
@@ -1246,13 +1322,13 @@ function renderVendorTable() {
   var q = (document.getElementById('vnd-search')||{value:''}).value.toLowerCase();
   var rows = vndRecords.filter(function(r){
     var f = r.fields;
-    return !q || ['Vendor','Item','Description'].some(function(k){ return (f[k]||'').toLowerCase().indexOf(q) !== -1; });
+    return !q || ['Vendor','Product Type','Product Make','Item','Description'].some(function(k){ return (f[k]||'').toLowerCase().indexOf(q) !== -1; });
   });
 
   // Sort
   rows.sort(function(a, b){
     var av = String(a.fields[vndSortField]||''), bv = String(b.fields[vndSortField]||'');
-    if(vndSortField === 'Price' || vndSortField === 'Rate') {
+    if(vndSortField === 'Unit Price') {
       av = parseFloat(av.replace(/[^0-9.-]/g,''))||0;
       bv = parseFloat(bv.replace(/[^0-9.-]/g,''))||0;
       return vndSortDir==='asc' ? av-bv : bv-av;
@@ -1271,19 +1347,20 @@ function renderVendorTable() {
   if(!tbody) return;
   tbody.innerHTML = page.map(function(r, i){
     var f = r.fields;
-    var price = f['Price'] ? parseFloat(String(f['Price']).replace(/[^0-9.-]/g,'')).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) : '—';
+    var price = f['Unit Price'] ? parseFloat(String(f['Unit Price']).replace(/[^0-9.-]/g,'')).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) : '—';
     return '<tr data-vnd-id="'+r.id+'" style="cursor:pointer">'+
       '<td class="c-vendor">'+e(f['Vendor']||'')+'</td>'+
+      '<td class="c-pmake">'+e(f['Product Make']||'')+'</td>'+
+      '<td class="c-ptype">'+e(f['Product Type']||'')+'</td>'+
       '<td class="c-item">'+e(f['Item']||'')+'</td>'+
       '<td class="c-desc" title="'+e(f['Description']||'')+'">'+e(f['Description']||'')+'</td>'+
-      '<td class="c-rate">'+e(f['Rate']||'—')+'</td>'+
       '<td class="c-price">'+price+'</td>'+
       '<td class="c-actions"><div class="row-actions">'+
         '<button class="icon-btn edit" data-vnd-edit="'+r.id+'" title="Edit">'+IC_PENCIL+'</button>'+
         '<button class="icon-btn del" data-vnd-del="'+r.id+'" data-vnd-vendor="'+e(f['Vendor']||'')+'" data-vnd-item="'+e(f['Item']||'')+'" title="Delete">'+IC_TRASH+'</button>'+
       '</div></td>'+
     '</tr>';
-  }).join('') || '<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--txt3);font-size:13px">No items found</td></tr>';
+  }).join('') || '<tr><td colspan="7" style="text-align:center;padding:32px;color:var(--txt3);font-size:13px">No items found</td></tr>';
 
   // Pagination
   renderVendorPagination(total);
@@ -1310,11 +1387,15 @@ function renderVendorTable() {
     var icon = newTh.querySelector('.sort-icon');
     if(icon) icon.textContent = field===vndSortField ? (vndSortDir==='asc'?'↑':'↓') : '↕';
     newTh.addEventListener('click', function(){
+      if(_resizing) return;
       if(vndSortField===field){ vndSortDir = vndSortDir==='asc'?'desc':'asc'; }
       else { vndSortField=field; vndSortDir='asc'; }
       renderVendorTable();
     });
   });
+
+  // Column resize — must run after sort headers replaces th elements
+  initColumnResize();
 
   renderVendorKPIs();
 }
@@ -1355,9 +1436,10 @@ function openVendorModal(id) {
   document.getElementById('vendor-modal-title').textContent = 'Edit Vendor Item';
   document.getElementById('vf-vendor').value  = f['Vendor']||'';
   document.getElementById('vf-item').value    = f['Item']||'';
+  document.getElementById('vf-ptype').value   = f['Product Type']||'';
+  document.getElementById('vf-pmake').value   = f['Product Make']||'';
   document.getElementById('vf-desc').value    = f['Description']||'';
-  document.getElementById('vf-rate').value    = f['Rate']||'';
-  document.getElementById('vf-price').value   = f['Price']||'';
+  document.getElementById('vf-price').value   = f['Unit Price']||'';
   document.getElementById('vendor-modal').style.display = 'flex';
 }
 
@@ -1377,25 +1459,28 @@ async function saveVendorItem() {
   var fields = {};
   if(vendor) fields['Vendor']      = vendor;
   if(item)   fields['Item']        = item;
+  var ptype = document.getElementById('vf-ptype').value.trim();
+  var pmake = document.getElementById('vf-pmake').value.trim();
   var desc  = document.getElementById('vf-desc').value.trim();
-  var rate  = document.getElementById('vf-rate').value.trim();
   var price = document.getElementById('vf-price').value.trim();
-  if(desc)  fields['Description']  = desc;
-  if(rate)  fields['Rate']         = rate;
-  if(price) fields['Price']        = price;
+  if(ptype) fields['Product Type']  = ptype;
+  if(pmake) fields['Product Make']  = pmake;
+  if(desc)  fields['Description']   = desc;
+  if(price) fields['Unit Price']    = price;
 
+  var savedEditId = vndEditId;
   closeVendorModal();
   setVndSave('saving');
 
   try {
-    var url    = vndEditId ? WORKER_URL+'/vendor/'+vndEditId : WORKER_URL+'/vendor';
-    var method = vndEditId ? 'PATCH' : 'POST';
-    var res    = await fetch(url, { method:method, headers:HEADERS, body:JSON.stringify({fields:fields}) });
+    var url    = savedEditId ? WORKER_URL+'/vendor/'+savedEditId : WORKER_URL+'/vendor';
+    var method = savedEditId ? 'PATCH' : 'POST';
+    var res    = await fetch(url, { method:method, headers:getHeaders(), body:JSON.stringify({fields:fields}) });
     var data   = await res.json();
     if(!res.ok) throw new Error((data.error&&data.error.message)||'HTTP '+res.status);
 
-    if(vndEditId) {
-      var idx = vndRecords.findIndex(function(r){return r.id===vndEditId;});
+    if(savedEditId) {
+      var idx = vndRecords.findIndex(function(r){return r.id===savedEditId;});
       if(idx !== -1) vndRecords[idx] = data;
     } else {
       vndRecords.push(data);
@@ -1403,7 +1488,7 @@ async function saveVendorItem() {
     setVndSave('saved');
     renderVendorKPIs();
     renderVendorTable();
-    toast((vndEditId?'Item updated':'Item added'),'ok');
+    toast((savedEditId?'Item updated':'Item added'),'ok');
   } catch(err) {
     setVndSave('err');
     document.getElementById('vnd-err-banner').innerHTML = '<b>Save failed:</b> '+err.message;
@@ -1416,7 +1501,7 @@ async function deleteVendorItem(id, vendor, item) {
   if(!confirm('Delete "'+item+'" from '+vendor+'? This cannot be undone.')) return;
   setVndSave('saving');
   try {
-    var res = await fetch(WORKER_URL+'/vendor/'+id, { method:'DELETE', headers:HEADERS });
+    var res = await fetch(WORKER_URL+'/vendor/'+id, { method:'DELETE', headers:getHeaders() });
     if(!res.ok) throw new Error('HTTP '+res.status);
     vndRecords = vndRecords.filter(function(r){return r.id!==id;});
     setVndSave('saved');
@@ -1430,6 +1515,212 @@ async function deleteVendorItem(id, vendor, item) {
 }
 
 document.getElementById('vendor-modal').addEventListener('click', function(ev){ if(ev.target===this) closeVendorModal(); });
+document.getElementById('vendor-modal').addEventListener('keydown', function(ev){
+  if(ev.key==='Enter'){ ev.preventDefault(); saveVendorItem(); }
+});
+
+
+// ================================================================
+// DASHBOARD
+// ================================================================
+function showDashboard() {
+  sessionStorage.setItem('mbb_screen','dashboard');
+  ['home-screen','app','vendor-screen','loading'].forEach(function(id){
+    document.getElementById(id).style.display='none';
+  });
+  if(items.length === 0) {
+    // Data not loaded yet — load it, then show dashboard
+    document.getElementById('loading').style.display='flex';
+    loadDataForDashboard();
+  } else {
+    document.getElementById('dashboard-screen').style.display='block';
+    renderDashboard();
+  }
+}
+
+async function loadDataForDashboard() {
+  try {
+    var records = [], offset = null, page = 0;
+    do {
+      page++; if(page>20) break;
+      setProgress(Math.min(10+page*30,85),'Loading data…');
+      var url = WORKER_URL+'?pageSize=100'+(offset?'&offset='+encodeURIComponent(offset):'');
+      var ctrl = new AbortController();
+      var timer = setTimeout(function(){ctrl.abort();},15000);
+      var res;
+      try { res = await fetch(url,{headers:getHeaders(),signal:ctrl.signal}); } finally { clearTimeout(timer); }
+      if(!res.ok){ var er=await res.json().catch(function(){return{};}); throw new Error((er.error&&er.error.message)||'HTTP '+res.status); }
+      var data = await res.json();
+      records = records.concat(data.records||[]);
+      offset = data.offset||null;
+    } while(offset);
+    allRecords = records;
+    parseItems();
+    setProgress(100,'Done!');
+    await new Promise(function(r){setTimeout(r,150);});
+    document.getElementById('loading').style.display='none';
+    document.getElementById('dashboard-screen').style.display='block';
+    renderDashboard();
+  } catch(err) {
+    document.getElementById('loading').style.display='none';
+    document.getElementById('dashboard-screen').style.display='block';
+    document.getElementById('dash-kpis').innerHTML='<div style="color:var(--red);font-size:13px">Failed to load data: '+err.message+'</div>';
+  }
+}
+
+function renderDashboard() {
+  var all     = items;
+  var won      = all.filter(function(r){return r.status==='WON';});
+  var lost     = all.filter(function(r){return r.status==='LOST';});
+  var pipeline = all.filter(function(r){return r.status==='PIPELINE';});
+  var cancelled= all.filter(function(r){return r.status==='CANCELLED';});
+  var closed   = all.filter(function(r){return r.status==='CLOSED';});
+  var active   = all.filter(function(r){return r.active==='Yes';});
+  var decided  = won.length + lost.length;
+  var winRate  = decided > 0 ? Math.round((won.length/decided)*100) : 0;
+
+  // Total RTU across pipeline + won
+  var activeRtu = pipeline.concat(won).reduce(function(s,r){return s+(parseInt(r.rtu)||0);},0);
+
+  // Overdue + upcoming deadlines
+  var withDeadline = all.filter(function(r){
+    return r.deadline && r.status!=='LOST'&&r.status!=='CANCELLED'&&r.status!=='CLOSED';
+  });
+  var overdue  = withDeadline.filter(function(r){return businessDaysUntil(r.deadline)===-1;});
+  var upcoming = withDeadline.filter(function(r){var bd=businessDaysUntil(r.deadline);return bd!==null&&bd>=0&&bd<=5;});
+
+  // ── KPI cards ─────────────────────────────────────────────────
+  document.getElementById('dash-kpis').innerHTML = [
+    {label:'Total Opportunities', val:all.length,         sub:'all time',        cls:''},
+    {label:'Active (Working On)', val:active.length,      sub:'in progress',     cls:'blue'},
+    {label:'Pipeline',            val:pipeline.length,    sub:'submitted',       cls:''},
+    {label:'Won',                 val:won.length,         sub:'opportunities',   cls:'green'},
+    {label:'Win Rate',            val:winRate+'%',        sub:decided+' decided',cls:'green'},
+    {label:'Overdue Deadlines',   val:overdue.length,     sub:'need attention',  cls:overdue.length>0?'red':''},
+  ].map(function(k){
+    return '<div class="dash-kpi '+k.cls+'">'+
+      '<div class="dash-kpi-lbl">'+k.label+'</div>'+
+      '<div class="dash-kpi-val">'+k.val+'</div>'+
+      '<div class="dash-kpi-sub">'+k.sub+'</div>'+
+    '</div>';
+  }).join('');
+
+  // ── Status bar chart ──────────────────────────────────────────
+  var statusData = [
+    {label:'Pipeline',   count:pipeline.length,  color:'var(--blue)'},
+    {label:'Won',        count:won.length,        color:'var(--green)'},
+    {label:'Lost',       count:lost.length,       color:'var(--red)'},
+    {label:'Cancelled',  count:cancelled.length,  color:'var(--txt3)'},
+    {label:'Closed',     count:closed.length,     color:'var(--purple)'},
+  ];
+  var maxStatus = Math.max.apply(null, statusData.map(function(d){return d.count;})) || 1;
+  document.getElementById('dash-bar-chart').innerHTML = statusData.map(function(d){
+    var pct = Math.round((d.count/maxStatus)*100);
+    return '<div class="bar-row">'+
+      '<div class="bar-label">'+d.label+'</div>'+
+      '<div class="bar-track"><div class="bar-fill" style="width:'+pct+'%;background:'+d.color+'"></div></div>'+
+      '<div class="bar-val">'+d.count+'</div>'+
+    '</div>';
+  }).join('');
+
+  // ── Win rate display ──────────────────────────────────────────
+  document.getElementById('dash-win-rate').innerHTML =
+    '<div class="rate-ring">'+
+      '<div class="rate-ring-val">'+winRate+'%</div>'+
+      '<div class="rate-ring-lbl">Win Rate</div>'+
+      '<div style="margin-top:16px;font-size:12px;color:var(--txt3);text-align:center;line-height:1.8">'+
+        '<span style="color:var(--green);font-weight:600">'+won.length+'</span> won &nbsp;&middot;&nbsp; '+
+        '<span style="color:var(--red);font-weight:600">'+lost.length+'</span> lost<br>'+
+        '<span style="color:var(--txt3)">'+decided+' decided total</span>'+
+      '</div>'+
+    '</div>';
+
+  // ── RTU by status ─────────────────────────────────────────────
+  var rtuData = [
+    {label:'Pipeline', count:pipeline.reduce(function(s,r){return s+(parseInt(r.rtu)||0);},0), color:'var(--blue)'},
+    {label:'Won',      count:won.reduce(function(s,r){return s+(parseInt(r.rtu)||0);},0),      color:'var(--green)'},
+    {label:'Lost',     count:lost.reduce(function(s,r){return s+(parseInt(r.rtu)||0);},0),     color:'var(--red)'},
+  ];
+  var maxRtu = Math.max.apply(null, rtuData.map(function(d){return d.count;})) || 1;
+  document.getElementById('dash-rtu-chart').innerHTML = rtuData.map(function(d){
+    var pct = Math.round((d.count/maxRtu)*100);
+    return '<div class="bar-row">'+
+      '<div class="bar-label">'+d.label+'</div>'+
+      '<div class="bar-track"><div class="bar-fill" style="width:'+pct+'%;background:'+d.color+'"></div></div>'+
+      '<div class="bar-val">'+d.count+'</div>'+
+    '</div>';
+  }).join('') + '<div style="font-size:10px;color:var(--txt3);font-family:monospace;margin-top:12px">Total RTUs: '+
+    rtuData.reduce(function(s,d){return s+d.count;},0)+'</div>';
+
+  // ── Deadlines ─────────────────────────────────────────────────
+  var deadlineItems = overdue.concat(upcoming).sort(function(a,b){
+    var da=parseDateStr(a.deadline),db=parseDateStr(b.deadline);
+    return da&&db?da-db:0;
+  }).slice(0,8);
+  document.getElementById('dash-deadline-count').textContent = deadlineItems.length + ' items';
+  document.getElementById('dash-deadlines').innerHTML = deadlineItems.length === 0
+    ? '<div style="font-size:13px;color:var(--txt3);padding:16px 0;text-align:center">No upcoming deadlines</div>'
+    : deadlineItems.map(function(r){
+        var bd  = businessDaysUntil(r.deadline);
+        var lbl = fmtDeadline(r.deadline);
+        var isOver = bd === -1;
+        var pill = isOver
+          ? '<span class="deadline-pill overdue">Overdue</span>'
+          : '<span class="deadline-pill soon">'+bd+' day'+(bd===1?'':'s')+'</span>';
+        return '<div class="deadline-item '+(isOver?'overdue':'soon')+'">'+
+          '<div class="deadline-proj" title="'+e(r.project)+'">'+e(r.project)+'</div>'+
+          '<div class="deadline-date">'+lbl+'</div>'+
+          pill+
+        '</div>';
+      }).join('');
+
+  // ── Top clients ───────────────────────────────────────────────
+  var clientMap = {};
+  all.filter(function(r){return r.client&&r.client!=='—';}).forEach(function(r){
+    clientMap[r.client] = (clientMap[r.client]||0)+1;
+  });
+  var topClients = Object.keys(clientMap)
+    .map(function(k){return {label:k,count:clientMap[k]};})
+    .sort(function(a,b){return b.count-a.count;})
+    .slice(0,6);
+  var maxClient = topClients.length > 0 ? topClients[0].count : 1;
+  document.getElementById('dash-client-chart').innerHTML = topClients.length === 0
+    ? '<div style="font-size:13px;color:var(--txt3);padding:16px 0">No client data</div>'
+    : topClients.map(function(d){
+        var pct = Math.round((d.count/maxClient)*100);
+        return '<div class="bar-row">'+
+          '<div class="bar-label" style="font-size:10px">'+d.label+'</div>'+
+          '<div class="bar-track"><div class="bar-fill" style="width:'+pct+'%;background:var(--amber)"></div></div>'+
+          '<div class="bar-val">'+d.count+'</div>'+
+        '</div>';
+      }).join('');
+
+  // ── Recent activity ───────────────────────────────────────────
+  var recent = all.filter(function(r){return r.last_update;})
+    .sort(function(a,b){return (parseInt(b.sr_no)||0)-(parseInt(a.sr_no)||0);})
+    .slice(0,10);
+  var badgeStyle = {
+    'WON':           'background:#d1fae5;color:#065f46',
+    'LOST':          'background:#fee2e2;color:#7f1d1d',
+    'CANCELLED':     'background:#f3f4f6;color:#374151',
+    'PIPELINE':      'background:#dbeafe;color:#1e3a5f',
+    'CLOSED':        'background:#ede9fe;color:#4c1d95',
+  };
+  document.getElementById('dash-recent').innerHTML = recent.length === 0
+    ? '<tr><td colspan="6" style="padding:20px 0;color:var(--txt3);text-align:center">No activity data</td></tr>'
+    : recent.map(function(r){
+        var bs = badgeStyle[r.status] || badgeStyle['PIPELINE'];
+        var dl = r.deadline ? fmtDeadline(r.deadline) : '—';
+        return '<tr>'+
+          '<td style="font-family:monospace;font-size:11px;color:var(--txt3)">'+e(r.sr_no)+'</td>'+
+          '<td style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+e(r.project)+'">'+e(r.project)+'</td>'+
+          '<td>'+e(r.client||'—')+'</td>'+
+          '<td><span style="'+bs+';padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600;font-family:monospace">'+badgeLbl(r.status)+'</span></td>'+
+          '<td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+e(r.last_update)+'">'+e(r.last_update)+'</td>'+
+          '<td style="font-family:monospace;font-size:11px">'+dl+'</td>'+
+        '</tr>';
+      }).join('');
+}
 
 // ── Export Report ─────────────────────────────────────────────────
 function exportReport(){
@@ -1511,10 +1802,11 @@ function exportReport(){
     '<tfoot><tr><td colspan="10">mBELLAb Power Solutions &middot; mBb-FM-13 &middot; Exported '+dateStr+' '+timeStr+'</td></tr></tfoot>'+
     '</table></body></html>';
 
-  var w=window.open('','_blank');
+  var w = window.open('', '_blank');
   w.document.write(html);
   w.document.close();
 }
+
 </script>
 </body>
 </html>
