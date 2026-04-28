@@ -800,7 +800,15 @@ function sortItems() {
 async function patchRecord(id,fields) {
   setSave('saving');
   var clean={};
-  Object.keys(fields).forEach(function(k){if(fields[k]!==''&&fields[k]!==null&&fields[k]!==undefined)clean[k]=fields[k];});
+  Object.keys(fields).forEach(function(k){
+    // Keep null explicitly (clears field in Airtable), skip only undefined and empty string
+    if(fields[k]===undefined) return;
+    if(fields[k]==='') return;
+    clean[k]=fields[k];
+  });
+  // Deadline: if empty string was passed, send null to clear it
+  if(fields[F.DEADLINE]===''||fields[F.DEADLINE]===undefined) clean[F.DEADLINE]=null;
+  else if(fields[F.DEADLINE]) clean[F.DEADLINE]=fields[F.DEADLINE];
   try {
     var res=await fetch(WORKER_URL+'/'+id,{method:'PATCH',headers:getHeaders(),body:JSON.stringify({fields:clean})});
     var d=await res.json().catch(function(){return{};});
@@ -871,7 +879,7 @@ async function saveEditRow(){
   fields[F.DATE]=gi('ei-date'); fields[F.PROJECT]=gi('ei-proj');
   fields[F.MAIN_CONT]=gi('ei-mc'); fields[F.CLIENT]=gi('ei-client');
   fields[F.RTU]=gi('ei-rtu')||'--'; fields[F.STATUS]=gi('ei-status');
-  fields[F.DEADLINE]=gi('ei-deadline'); fields[F.LAST_UPDATE]=gi('ei-update');
+  fields[F.DEADLINE]=gi('ei-deadline')||null; fields[F.LAST_UPDATE]=gi('ei-update');
   var item=items.find(function(i){return i._id===editingId;});
   if(item){
     item.date=fields[F.DATE]; item.project=fields[F.PROJECT]; item.main_cont=fields[F.MAIN_CONT];
@@ -1197,7 +1205,7 @@ async function saveEditModal() {
   fields[F.LAST_UPDATE] = g('ef-update');
   var docsVal = g('ef-docs'); if(docsVal) fields[F.DOCS] = docsVal;
   var dlVal = document.getElementById('ef-deadline').value;
-  if(dlVal) fields[F.DEADLINE] = dlVal;
+  fields[F.DEADLINE] = dlVal || null;
   // Update local item
   var item = items.find(function(i){ return i._id === id; });
   if(item){
@@ -1207,7 +1215,7 @@ async function saveEditModal() {
     item.status=normStatus(fields[F.STATUS]); item.proposal=fields[F.PROPOSAL];
     item.last_update=fields[F.LAST_UPDATE];
     if(docsVal) item.docs=docsVal;
-    if(dlVal) item.deadline=dlVal;
+    item.deadline = dlVal || '';
     var rec=allRecords.find(function(r){return r.id===id;});
     if(rec){
       Object.keys(fields).forEach(function(k){ rec.fields[k]=fields[k]; });
