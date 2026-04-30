@@ -1249,18 +1249,17 @@ function showHome() {
 }
 function showOpportunities() {
   sessionStorage.setItem('mbb_screen','opportunities');
-  document.getElementById('home-screen').style.display = 'none';
-  document.getElementById('vendor-screen').style.display = 'none';
-  document.getElementById('app').style.display = 'block';
-  // Always reload — ensures fresh data on refresh
+  ['home-screen','vendor-screen','dashboard-screen','app'].forEach(function(id){
+    document.getElementById(id).style.display='none';
+  });
   document.getElementById('loading').style.display = 'flex';
-  document.getElementById('app').style.display = 'none';
   loadAll();
 }
 function showVendors() {
   sessionStorage.setItem('mbb_screen','vendors');
-  document.getElementById('home-screen').style.display = 'none';
-  document.getElementById('app').style.display = 'none';
+  ['home-screen','app','dashboard-screen','loading'].forEach(function(id){
+    document.getElementById(id).style.display='none';
+  });
   document.getElementById('vendor-screen').style.display = 'block';
   loadVendors();
 }
@@ -1355,7 +1354,7 @@ function renderVendorTable() {
   if(!tbody) return;
   tbody.innerHTML = page.map(function(r, i){
     var f = r.fields;
-    var price = f['Unit Price'] ? parseFloat(String(f['Unit Price']).replace(/[^0-9.-]/g,'')).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) : '—';
+    var price = f['Price'] ? parseFloat(String(f['Price']).replace(/[^0-9.-]/g,'')).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) : '—';
     return '<tr data-vnd-id="'+r.id+'" style="cursor:pointer">'+
       '<td class="c-vendor">'+e(f['Vendor']||'')+'</td>'+
       '<td class="c-pmake">'+e(f['Product Make']||'')+'</td>'+
@@ -1447,7 +1446,7 @@ function openVendorModal(id) {
   document.getElementById('vf-ptype').value   = f['Product Type']||'';
   document.getElementById('vf-pmake').value   = f['Product Make']||'';
   document.getElementById('vf-desc').value    = f['Description']||'';
-  document.getElementById('vf-price').value   = f['Unit Price']||'';
+  document.getElementById('vf-price').value   = f['Price']||'';
   document.getElementById('vendor-modal').style.display = 'flex';
 }
 
@@ -1474,7 +1473,7 @@ async function saveVendorItem() {
   if(ptype) fields['Product Type']  = ptype;
   if(pmake) fields['Product Make']  = pmake;
   if(desc)  fields['Description']   = desc;
-  if(price) fields['Unit Price']    = price;
+  if(price) fields['Price']    = price;
 
   var savedEditId = vndEditId;
   closeVendorModal();
